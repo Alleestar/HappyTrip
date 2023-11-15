@@ -28,7 +28,6 @@ defineProps({ question: Object });
         <img class="article-img" src="@/assets/pictures.png" />
       </div>
     </router-link>
-    <!-- <a class="article d-flex justify-content-between" href="#"> </a> -->
   </div>
 </template>
 
