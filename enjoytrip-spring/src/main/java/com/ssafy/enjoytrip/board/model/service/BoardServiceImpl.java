@@ -72,7 +72,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void deleteBoard(int boardNo) throws Exception {
-        // TODO : QnaDaoImpl의 deleteQna 호출
         boardMapper.deleteBoard(boardNo);
     }
 
