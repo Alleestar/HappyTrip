@@ -1,0 +1,35 @@
+<script setup></script>
+
+<template>
+  <div id="footer">
+    <footer class="d-flex justify-content-center">
+      <span>&copy; 권송아, 이동훈</span>
+    </footer>
+  </div>
+</template>
+
+<style scoped>
+@font-face {
+  font-family: "EASTARJET-DemiLight";
+  src: url("/fonts/EASTARJET-DemiLight.ttf");
+}
+
+#footer {
+  width: 100%;
+  display: flex;
+  flex: 0.5;
+}
+
+footer {
+  width: 100%;
+  background-color: black;
+  padding: 10px;
+}
+
+span {
+  font-family: "EASTARJET-DemiLight";
+  font-size: 8px;
+  text-align: center;
+  color: white;
+}
+</style>
