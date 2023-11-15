@@ -1,0 +1,77 @@
+<!-- resources/mapper/QnaService/QnaServiceMapper.xml -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.qna.model.mapper.QnaMapper">
+
+    <resultMap type="QnaDto" id="Qna">
+        <result column="Qna_no" property="QnaNo"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="datetime" property="datetime"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="comment_cnt" property="commentCnt"/>
+        <result column="read_cnt" property="readCnt"/>
+    </resultMap>
+
+    <insert id="writeQna" parameterType="QnaDto">
+        insert into Qna (Qna_no, user_nickname,  datetime, title, content, comment_cnt, read_cnt)
+        values (#{QnaNo}, #{userNickname}, now(), #{title}, #{content}, 0, 0)
+    </insert>
+
+    <update id="updateHit" parameterType="map">
+        update Qna set read_cnt = #{readCnt}
+        where Qna_no = #{QnaNo}
+    </update>
+
+    <insert id="modifyQna" parameterType="QnaDto">
+        update Qna set title = #{title}, content = #{content}
+        where Qna_no = #{QnaNo}
+    </insert>
+
+
+    <select id="listQna" parameterType="map" resultMap="Qna">
+        select *
+        from Qna
+        <where>
+            <choose>
+                <when test='key == "user_nickname"'>
+                    user_nickname = #{word}
+                </when>
+                <when test='key == "tc"'>
+                    title like concat('%', #{word}, '%') or content like concat('%', #{word}, '%')
+                </when>
+            </choose>
+        </where>
+        order by Qna_no desc
+        limit #{start}, #{listsize}
+    </select>
+
+    <select id="getTotalQnaCount" parameterType="map" resultType="int">
+        select count(Qna_no)
+        from Qna
+        <where>
+            <choose>
+                <when test='key == "user_nickname"'>
+                    user_nickname = #{word}
+                </when>
+                <when test='key == "tc"'>
+                    title like concat('%', #{word}, '%') or content like concat('%', #{word}, '%')
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="getQna" parameterType="int" resultMap="Qna">
+        select *
+        from Qna
+        where Qna_no = #{QnaNo}
+    </select>
+
+    <delete id="deleteQna" parameterType="int">
+        delete from Qna
+        where Qna_no = #{QnaNo}
+    </delete>
+
+
+</mapper>
