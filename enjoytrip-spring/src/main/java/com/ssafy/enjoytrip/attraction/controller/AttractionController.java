@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.attraction.controller;
 
+import com.ssafy.enjoytrip.attraction.model.AddrDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionListDto;
 import com.ssafy.enjoytrip.attraction.model.service.AttractionService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -52,6 +54,20 @@ public class AttractionController {
             HttpHeaders header = new HttpHeaders();
             header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
             return ResponseEntity.ok().headers(header).body(attractionDto);
+        } catch (Exception e) {
+            return exceptionHandling(e);
+        }
+    }
+
+    @ApiOperation(value = "주소정보 가져오기", notes = "dropbox의 주소 정보를 가져온다.", response = AttractionDto.class)
+    @GetMapping("/addr")
+    public ResponseEntity<?> getAddr() {
+        log.info("getAddr");
+        try{
+            List<AddrDto> addrDto = as.getAddr();
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            return ResponseEntity.ok().headers(header).body(addrDto);
         } catch (Exception e) {
             return exceptionHandling(e);
         }
