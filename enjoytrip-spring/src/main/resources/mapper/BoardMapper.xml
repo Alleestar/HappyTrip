@@ -1,0 +1,75 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.board.model.mapper.BoardMapper">
+
+    <resultMap type="BoardDto" id="Board">
+        <result column="Board_no" property="boardNo"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="datetime" property="datetime"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="comment_cnt" property="commentCnt"/>
+        <result column="read_cnt" property="readCnt"/>
+    </resultMap>
+
+    <insert id="writeBoard" parameterType="BoardDto">
+        insert into Board (Board_no, user_nickname,  datetime, title, content, comment_cnt, read_cnt)
+        values (#{BoardNo}, #{userNickname}, now(), #{title}, #{content}, 0, 0)
+    </insert>
+
+    <update id="updateHit" parameterType="map">
+        update Board set read_cnt = #{readCnt}
+        where Board_no = #{BoardNo}
+    </update>
+
+    <insert id="modifyBoard" parameterType="BoardDto">
+        update Board set title = #{title}, content = #{content}
+        where Board_no = #{BoardNo}
+    </insert>
+
+
+    <select id="listBoard" parameterType="map" resultMap="Board">
+        select *
+        from Board
+        <where>
+            <choose>
+                <when test='key == "user_nickname"'>
+                    user_nickname = #{word}
+                </when>
+                <when test='key == "tc"'>
+                    title like concat('%', #{word}, '%') or content like concat('%', #{word}, '%')
+                </when>
+            </choose>
+        </where>
+        order by Board_no desc
+        limit #{start}, #{listsize}
+    </select>
+
+    <select id="getTotalBoardCount" parameterType="map" resultType="int">
+        select count(Board_no)
+        from Board
+        <where>
+            <choose>
+                <when test='key == "user_nickname"'>
+                    user_nickname = #{word}
+                </when>
+                <when test='key == "tc"'>
+                    title like concat('%', #{word}, '%') or content like concat('%', #{word}, '%')
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="getBoard" parameterType="int" resultMap="Board">
+        select *
+        from Board
+        where Board_no = #{BoardNo}
+    </select>
+
+    <delete id="deleteBoard" parameterType="int">
+        delete from Board
+        where Board_no = #{BoardNo}
+    </delete>
+
+
+</mapper>

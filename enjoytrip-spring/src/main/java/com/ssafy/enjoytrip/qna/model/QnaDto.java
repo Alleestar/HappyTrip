@@ -2,9 +2,6 @@ package com.ssafy.enjoytrip.qna.model;
 
 import lombok.Data;
 
-import java.sql.Date;
-import java.util.List;
-
 @Data
 public class QnaDto {
 
