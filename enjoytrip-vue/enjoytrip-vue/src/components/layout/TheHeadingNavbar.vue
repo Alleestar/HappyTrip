@@ -99,7 +99,7 @@
 nav {
   /* display: flex; */
   width: 100%;
-  height: 80px;
+  height: 70px;
   background-color: white;
 }
 

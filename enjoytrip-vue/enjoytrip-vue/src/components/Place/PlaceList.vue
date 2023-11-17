@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, defineEmits } from "vue";
 import PlacePageNavigation from "@/components/Place/PlacePageNavigation.vue";
-import PlaceListItem from "@/components/Place/PlaceListItem.vue";
+import PlaceListItem from "@/components/Place/item/PlaceListItem.vue";
 import { listAttraction, getAddr } from "@/api/attraction.js";
 
 const init = ref(true);
@@ -10,7 +10,6 @@ const totalPage = ref(1);
 const word = ref("");
 const addrInfo = ref([]);
 getAddr(
-  null,
   ({ data }) => {
     addrInfo.value = data;
   },
@@ -39,7 +38,6 @@ function searchList() {
   params.word = word.value;
   params.sidoCode = sido.value;
   params.gugunCode = gugun.value;
-  console.log(params);
   listAttraction(
     params,
     ({ data }) => {
