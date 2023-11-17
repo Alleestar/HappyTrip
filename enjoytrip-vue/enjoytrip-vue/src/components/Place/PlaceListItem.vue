@@ -1,5 +1,5 @@
 <script setup>
-defineProps({ place: Object });
+defineProps({ attraction: Object });
 </script>
 
 <template>
@@ -7,23 +7,23 @@ defineProps({ place: Object });
     <div class="container m-0 p-4 border">
       <router-link
         class="article d-flex justify-content-between"
-        :to="{ name: 'qna-detail', query: { qid: place.qnaNo } }"
+        :to="{ name: '', query: { aid: attraction.contentId } }"
       >
         <div class="desc col-9">
           <h6 class="medium article-title font-weight-bold">
-            <b>{{ place.title }}</b>
+            <b>{{ attraction.title }}</b>
           </h6>
           <p class="light article-content mb-2">
-            {{ place.content }}
+            {{ attraction.title }}
           </p>
           <div class="info">
-            <span class="meta-info text-secondary">{{ place.datetime }}</span>
+            <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
             <span class="meta-info text-secondary"> ∙ </span>
-            <span class="meta-info text-secondary">{{ place.userNickname }}</span>
+            <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
           </div>
         </div>
-        <div class="article-img-shape" v-if="place.img">
-          <img class="article-img" src="{{ place.img }}" />
+        <div class="article-img-shape" v-if="attraction.img">
+          <img class="article-img" src="{{ attraction.img }}" />
         </div>
         <div>
           <img class="article-img" src="@/assets/pictures.png" />
