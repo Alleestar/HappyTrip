@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getCategory } from "@/api/public.js";
+import PlaceDetail from "@/components/Place/PlaceDetail.vue";
+
 const props = defineProps({ attraction: Object });
 
 const { VITE_TRIP_SERVICE_KEY } = import.meta.env;
@@ -41,11 +43,7 @@ const getCat = () => {
 <template>
   <div>
     <div class="container m-0 p-3 border">
-      <router-link
-        class="article"
-        style="display: flex; justify-content: space-between"
-        :to="{ name: '', query: { aid: attraction.contentId } }"
-      >
+      <button class="article" data-bs-toggle="modal" data-bs-target="#placeDetail">
         <div class="desc mx-1">
           <h6 class="medium article-title font-weight-bold">
             <b>{{ attraction.title }}</b>
@@ -53,9 +51,7 @@ const getCat = () => {
           <p class="light article-content m-0" v-if="category">
             {{ category }}
           </p>
-          <div class="info">
-            <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
-          </div>
+          <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
         </div>
         <div class="image mx-1">
           <div class="article-img-shape" v-if="attraction.img1">
@@ -65,7 +61,8 @@ const getCat = () => {
             <img class="article-img" src="@/assets/pictures.png" />
           </div>
         </div>
-      </router-link>
+      </button>
+      <PlaceDetail :attraction="attraction" :category="category" />
     </div>
   </div>
 </template>
@@ -100,20 +97,26 @@ const getCat = () => {
 
 .meta-info {
   font-family: "EASTARJET-DemiLight";
-  font-size: 8px;
+  font-size: 10px;
 }
 
 .article {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  background-color: white;
+  border: none;
+  width: 100%;
+  justify-content: start;
 }
 
 .article-content {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .article-title {
-  font-size: 12px;
+  font-size: 14px;
+  margin-bottom: 2px;
 }
 
 .image {
@@ -126,6 +129,9 @@ const getCat = () => {
   display: flex;
   flex-direction: column;
   flex: 7;
+  height: 70px;
+  align-items: start;
+  justify-content: center;
 }
 
 .article-img-shape {

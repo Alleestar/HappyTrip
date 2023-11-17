@@ -15,8 +15,6 @@
 }
 
 #footer {
-  /* position: relative; */
-  /* bottom: 0px; */
   margin-top: auto;
   width: 100%;
   height: 100px;
