@@ -18,6 +18,7 @@ const currentPage = ref(1);
 const totalPage = ref(1);
 const key = ref("");
 const word = ref("");
+
 const params = {
   pgno: 1,
   spp: import.meta.env.VITE_ARTICLE_LIST_SIZE,
