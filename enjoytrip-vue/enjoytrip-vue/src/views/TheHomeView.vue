@@ -7,6 +7,9 @@
 <style scoped>
 #body {
   display: flex;
-  flex: 9;
+  flex-direction: column;
+  height: 100vh;
+  /* flex: 1; */
+  flex: 1;
 }
 </style>

@@ -1,32 +1,69 @@
 <script setup>
-defineProps({ attraction: Object });
+import { ref, onMounted } from "vue";
+import { getCategory } from "@/api/public.js";
+const props = defineProps({ attraction: Object });
+
+const { VITE_TRIP_SERVICE_KEY } = import.meta.env;
+
+const category = ref("");
+const param = ref({
+  numOfRows: 1,
+  pageNo: 1,
+  MobileOS: "ETC",
+  MobileApp: "EnjoyTrip",
+  contentTypeId: props.attraction.contentTypeId,
+  cat1: props.attraction.cat1,
+  cat2: props.attraction.cat2,
+  cat3: props.attraction.cat3,
+  _type: "json",
+  serviceKey: VITE_TRIP_SERVICE_KEY,
+});
+
+onMounted(() => {
+  getCat();
+});
+
+const getCat = () => {
+  getCategory(
+    param.value,
+    ({ data }) => {
+      if (data.response.body.items.item[0].name) {
+        category.value = data.response.body.items.item[0].name;
+      }
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
 </script>
 
 <template>
   <div>
-    <div class="container m-0 p-4 border">
+    <div class="container m-0 p-3 border">
       <router-link
-        class="article d-flex justify-content-between"
+        class="article"
+        style="display: flex; justify-content: space-between"
         :to="{ name: '', query: { aid: attraction.contentId } }"
       >
-        <div class="desc col-9">
+        <div class="desc mx-1">
           <h6 class="medium article-title font-weight-bold">
             <b>{{ attraction.title }}</b>
           </h6>
-          <p class="light article-content mb-2">
-            {{ attraction.title }}
+          <p class="light article-content m-0" v-if="category">
+            {{ category }}
           </p>
           <div class="info">
             <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
-            <span class="meta-info text-secondary"> ∙ </span>
-            <span class="meta-info text-secondary">{{ attraction.addr1 }}</span>
           </div>
         </div>
-        <div class="article-img-shape" v-if="attraction.img">
-          <img class="article-img" src="{{ attraction.img }}" />
-        </div>
-        <div>
-          <img class="article-img" src="@/assets/pictures.png" />
+        <div class="image mx-1">
+          <div class="article-img-shape" v-if="attraction.img1">
+            <img class="article-img" :src="attraction.img1" />
+          </div>
+          <div class="article-img-shape" v-else>
+            <img class="article-img" src="@/assets/pictures.png" />
+          </div>
         </div>
       </router-link>
     </div>
@@ -79,12 +116,27 @@ defineProps({ attraction: Object });
   font-size: 12px;
 }
 
+.image {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+}
+
+.desc {
+  display: flex;
+  flex-direction: column;
+  flex: 7;
+}
+
 .article-img-shape {
-  border-radius: 10%; /* 50%의 원형 경계 생성 */
-  overflow: hidden; /* 경계를 벗어나는 부분을 숨김 */
+  border-radius: 10%;
+  overflow: hidden;
+  width: 70px;
+  height: 70px;
 }
 
 .article-img {
-  width: 70px;
+  width: 100%;
+  height: 100%;
 }
 </style>
