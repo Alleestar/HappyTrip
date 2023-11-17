@@ -5,7 +5,7 @@ var map;
 const positions = ref([]);
 const markers = ref([]);
 
-const props = defineProps({ stations: Array, selectStation: Object });
+const props = defineProps({ attractions: Array, selectStation: Object });
 
 watch(
   () => props.selectStation.value,
@@ -35,17 +35,19 @@ onMounted(() => {
 });
 
 watch(
-  () => props.stations.value,
+  () => props.attractions.value,
   () => {
     positions.value = [];
-    props.stations.forEach((station) => {
-      let obj = {};
-      obj.latlng = new kakao.maps.LatLng(station.lat, station.lng);
-      obj.title = station.statNm;
+    if (props.attractions.length > 0) {
+      props.attractions.forEach((attraction) => {
+        let obj = {};
+        obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+        obj.title = attraction.statNm;
 
-      positions.value.push(obj);
-    });
-    loadMarkers();
+        positions.value.push(obj);
+      });
+      loadMarkers();
+    }
   },
   { deep: true }
 );

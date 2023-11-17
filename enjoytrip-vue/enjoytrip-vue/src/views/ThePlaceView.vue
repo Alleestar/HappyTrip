@@ -4,7 +4,7 @@ import PlaceList from "@/components/Place/PlaceList.vue";
 
 import { ref } from "vue";
 
-const chargingStations = ref([]);
+// const chargingStations = ref([]);
 const selectStation = ref({});
 
 const currentPage = ref(1);
@@ -17,16 +17,19 @@ const params = {
 };
 
 const attractions = ref([]);
+function onShowMap(val) {
+  attractions.value = val;
+}
 </script>
 
 <template>
   <div id="body" style="height: 100vh">
     <aside class="d-flex" id="aside" style="height: 100%">
-      <PlaceList />
+      <PlaceList @show-map="onShowMap" />
     </aside>
     <div id="map">
       <div class="container text-center mt-3">
-        <VKakaoMap :stations="chargingStations" :selectStation="selectStation" />
+        <VKakaoMap :attractions="attractions" :selectStation="selectStation" />
       </div>
     </div>
   </div>
@@ -36,7 +39,7 @@ const attractions = ref([]);
 #body {
   display: flex;
   flex-direction: row;
-  flex: 9;
+  flex: 1;
 }
 
 #aside {

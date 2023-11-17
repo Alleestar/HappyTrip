@@ -15,20 +15,23 @@
 }
 
 #footer {
+  /* position: relative; */
+  /* bottom: 0px; */
+  margin-top: auto;
   width: 100%;
-  display: flex;
-  flex: 0.5;
+  height: 100px;
 }
 
 footer {
   width: 100%;
+  height: 100%;
   background-color: black;
   padding: 10px;
 }
 
 span {
   font-family: "EASTARJET-DemiLight";
-  font-size: 8px;
+  font-size: 12px;
   text-align: center;
   color: white;
 }

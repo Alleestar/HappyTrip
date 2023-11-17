@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, defineEmits } from "vue";
 import PlacePageNavigation from "@/components/Place/PlacePageNavigation.vue";
 import PlaceListItem from "@/components/Place/PlaceListItem.vue";
 import { listAttraction, getAddr } from "@/api/attraction.js";
@@ -39,6 +39,7 @@ function searchList() {
   params.word = word.value;
   params.sidoCode = sido.value;
   params.gugunCode = gugun.value;
+  console.log(params);
   listAttraction(
     params,
     ({ data }) => {
@@ -46,17 +47,29 @@ function searchList() {
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
       init.value = false;
-      console.log("된거니..?");
+      onShowMap(attractions.value);
+      params.pgno = 1;
     },
     (error) => {
       console.log(error);
+      params.pgno = 1;
     }
   );
+}
+
+function onSetCategory(value) {
+  params.contentTypeId = value;
+  searchList();
 }
 
 function onPageChange(value) {
   params.pgno = value;
   searchList();
+}
+
+const emit = defineEmits(["showMap"]);
+function onShowMap(attractions) {
+  emit("showMap", attractions);
 }
 </script>
 
@@ -103,25 +116,49 @@ function onPageChange(value) {
           />
         </div>
         <div class="p-0" style="flex: 2">
-          <button class="w-100 btn btn-dark form-control" id="search-btn" @click="searchList">
+          <button
+            class="w-100 btn btn-dark form-control"
+            id="search-btn"
+            @click="onSetCategory(null)"
+          >
             검색
           </button>
         </div>
       </div>
       <div class="my-row">
         <div style="display: flex; justify-content: space-evenly">
-          <button class="btn btn-outline-dark search-category-btn me-1" value="12">관광</button>
-          <button class="btn btn-outline-dark search-category-btn me-1" value="14">문화</button>
-          <button class="btn btn-outline-dark search-category-btn" value="15">축제·공연</button>
+          <button class="btn btn-outline-dark search-category-btn me-1" @click="onSetCategory(12)">
+            관광
+          </button>
+          <button class="btn btn-outline-dark search-category-btn me-1" @click="onSetCategory(14)">
+            문화
+          </button>
+          <button class="btn btn-outline-dark search-category-btn" @click="onSetCategory(15)">
+            축제·공연
+          </button>
         </div>
         <div style="display: flex; justify-content: space-evenly">
-          <button class="btn btn-outline-dark search-category-btn me-1" value="25">여행</button>
-          <button class="btn btn-outline-dark search-category-btn me-1" value="28">레포츠</button>
-          <button class="btn btn-outline-dark search-category-btn" value="32">숙박</button>
+          <button
+            class="btn btn-outline-dark search-category-btn me-1"
+            @click="onSetCategory(this.value)"
+            value="25"
+          >
+            여행
+          </button>
+          <button class="btn btn-outline-dark search-category-btn me-1" @click="onSetCategory(28)">
+            레포츠
+          </button>
+          <button class="btn btn-outline-dark search-category-btn" @click="onSetCategory(32)">
+            숙박
+          </button>
         </div>
         <div style="display: flex; justify-content: space-evenly">
-          <button class="btn btn-outline-dark search-category-btn me-1" value="38">쇼핑</button>
-          <button class="btn btn-outline-dark search-category-btn me-1" value="39">음식점</button>
+          <button class="btn btn-outline-dark search-category-btn me-1" @click="onSetCategory(38)">
+            쇼핑
+          </button>
+          <button class="btn btn-outline-dark search-category-btn me-1" @click="onSetCategory(39)">
+            음식점
+          </button>
           <button
             class="btn btn-outline-dark search-category-btn"
             style="visibility: hidden"

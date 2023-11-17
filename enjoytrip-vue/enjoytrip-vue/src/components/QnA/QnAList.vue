@@ -70,7 +70,8 @@ searchList();
 </script>
 
 <template>
-  <div class="row container-fluid m-1 d-flex align-items-start flex-column">
+  <!-- class="row container-fluid m-1 d-flex align-items-start flex-column" -->
+  <div id="list">
     <div class="col-10 my-1 mx-auto">
       <div class="container p-4 border">
         <h5 id="qna-container-title">QnA</h5>
@@ -144,6 +145,9 @@ searchList();
 </template>
 
 <style scoped>
+#list {
+  flex: 1;
+}
 @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");

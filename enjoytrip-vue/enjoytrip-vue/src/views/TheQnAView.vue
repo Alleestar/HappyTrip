@@ -14,6 +14,8 @@ provide("comments", comments);
 <style scoped>
 #body {
   display: flex;
-  flex: 9;
+  /* flex-direction: col; */
+  flex: 1;
+  /* flex: 9; */
 }
 </style>
