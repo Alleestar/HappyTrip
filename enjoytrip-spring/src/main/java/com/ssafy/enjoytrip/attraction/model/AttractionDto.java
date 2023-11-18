@@ -6,7 +6,9 @@ import lombok.Data;
 public class AttractionDto {
     int contentId;
     int contentTypeId;
-    String categoryCode;
+    String cat1;
+    String cat2;
+    String cat3;
     String title;
     String addr1;
     String img1;

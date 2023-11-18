@@ -7,7 +7,9 @@
     <resultMap type="AttractionDto" id="attraction">
         <result column="content_id" property="contentId"/>
         <result column="content_type_id" property="contentTypeId"/>
-        <result column="cat3" property="categoryCode"/>
+        <result column="cat1" property="cat1"/>
+        <result column="cat2" property="cat2"/>
+        <result column="cat3" property="cat3"/>
         <result column="title" property="title"/>
         <result column="addr1" property="addr1"/>
         <result column="first_image" property="img1"/>
@@ -32,7 +34,7 @@
     <select id="listAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
                i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
-               i.first_image as first_image, i.first_image2 as first_image2
+               i.first_image as first_image, i.first_image2 as first_image2, d.cat1 as cat1, d.cat2 as cat2
         from (  select *
                 from attraction_info
                <where>
@@ -77,7 +79,7 @@
     <select id="getAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
         i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
-        i.first_image as first_image, i.first_image2 as first_image2
+        i.first_image as first_image, i.first_image2 as first_image2,  d.cat1 as cat1, d.cat2 as cat2
         from (  select *
         from attraction_info
         where latitude = #{latitude} and longitude = #{longitude}
