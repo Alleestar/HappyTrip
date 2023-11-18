@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getCategory } from "@/api/public.js";
-import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 
 const props = defineProps({ attraction: Object });
 
@@ -38,12 +37,18 @@ const getCat = () => {
     }
   );
 };
+
+const emitModal = defineEmits(["showModal"])
+function onShowModal(){
+  const available = ref(true);
+  emitModal("showModal", props.attraction, category, available);
+}
 </script>
 
 <template>
   <div>
     <div class="container m-0 p-3 border">
-      <button class="article" data-bs-toggle="modal" data-bs-target="#placeDetail">
+      <button @click="onShowModal(attraction, desc, category)" class="article" data-bs-toggle="modal" data-bs-target="#placeDetail">
         <div class="desc mx-1">
           <h6 class="medium article-title font-weight-bold">
             <b>{{ attraction.title }}</b>
@@ -62,7 +67,7 @@ const getCat = () => {
           </div>
         </div>
       </button>
-      <PlaceDetail :attraction="attraction" :category="category" />
+      <!-- <PlaceDetail :attraction="attraction" :category="category" /> -->
     </div>
   </div>
 </template>
@@ -98,9 +103,11 @@ const getCat = () => {
 .meta-info {
   font-family: "EASTARJET-DemiLight";
   font-size: 10px;
+  text-align: left;
 }
 
 .article {
+  
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -115,6 +122,7 @@ const getCat = () => {
 }
 
 .article-title {
+  text-align: left;
   font-size: 14px;
   margin-bottom: 2px;
 }
