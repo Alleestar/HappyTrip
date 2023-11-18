@@ -7,7 +7,7 @@ function listAttraction(params, success, fail) {
 }
 
 function describeAttraction(params, success, fail) {
-  local.get(`attraction/place/describe`, { params }).then(success).catch(fail);
+  local.get(`attraction/place`, { params }).then(success).catch(fail);
 }
 
 function getAddr(success, fail) {

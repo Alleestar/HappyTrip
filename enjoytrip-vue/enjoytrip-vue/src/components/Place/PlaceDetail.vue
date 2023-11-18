@@ -1,48 +1,51 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { describeAttraction } from "@/api/attraction.js";
 
 const props = defineProps({ attraction: Object, category: String });
-const params = {
-  aid: props.attraction.contentId,
-};
-
 const desc = ref("");
-describeAttraction(
-  params,
-  ({ data }) => {
-    desc.value = data.detail;
-  },
-  (error) => {
-    console.log(error);
-  }
-);
+const available = ref("false");
+
+onUpdated(() => {
+  available.value=true
+  const params = {
+  aid: props.attraction.contentId,
+  };
+  getDesc(params);
+})
+
+const getDesc = (params)=>{describeAttraction(
+    params,
+    ({ data }) => {
+      desc.value = data.detail;
+    },
+    (error) => {
+      console.log(error);
+    }
+);}
 </script>
 
 <template>
   <div class="modal" id="placeDetail">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header p-0" style="display: flex; flex-direction: column">
-          <div class="img-area" style="display: flex" v-if="attraction.img1">
-            <div class="img-shape">
+      <div class="modal-content" v-if="available">
+        <div class="modal-header p-0 mt-4 mx-4" style="display: flex; flex-direction: column">
+          <div class="img-area" style="display: flex; align-items: center;" v-if="attraction.img1">
+            <div class="img-shape mb-3">
               <img style="width: 100%" :src="attraction.img1" />
-            </div>
-            <div class="img-shape" v-if="attraction.img2">
-              <img style="width: 100%" :src="attraction.img2" />
             </div>
           </div>
           <div class="info-area">
             <div>
-              <h4 class="medium my-0 me-2">{{ attraction.title }}</h4>
+              <h4 class="medium my-0 me-2" style="font-size: 22px;">{{ attraction.title }}</h4>
             </div>
             <div class="d-flex align-items-end">
-              <p class="light m-0" style="font-size: 15px">{{ category }}</p>
+              <p class="light m-0" style="font-size: 13px">{{ category }}</p>
             </div>
           </div>
         </div>
         <div class="modal-body detail-area">
-          <p class="light" style="margin-bottom: 0px" v-if="desc">
+          <p class="light" style="margin-bottom: 0px;" v-if="desc">
             {{ desc }}
           </p>
           <p class="light" style="margin-bottom: 0px" v-else>장소에 대한 설명이 없습니다.</p>
@@ -93,10 +96,17 @@ describeAttraction(
   src: url("/fonts/EASTARJET-DemiLight.ttf");
 }
 
+.detail-area{
+  max-height: 200px;
+  overflow-y: scroll
+}
+
 .img-shape {
   overflow: hidden;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-items: center;
 }
 
 .info-area {
@@ -114,8 +124,6 @@ describeAttraction(
 
 .light {
   font-family: "EASTARJET-DemiLight";
-}
-.title {
 }
 
 .btn-heart {

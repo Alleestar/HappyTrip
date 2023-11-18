@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import PlacePageNavigation from "@/components/Place/PlacePageNavigation.vue";
 import PlaceListItem from "@/components/Place/item/PlaceListItem.vue";
+import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 import { listAttraction, getAddr } from "@/api/attraction.js";
 
 const init = ref(true);
@@ -65,10 +66,19 @@ function onPageChange(value) {
   searchList();
 }
 
+const modalAttraction = ref({})
+const modalCategory = ref("")
+function onShowModal(attraction, category, available){
+  modalAttraction.value = attraction;
+  modalCategory.value = category.value;
+}
+
+
 const emit = defineEmits(["showMap"]);
 function onShowMap(attractions) {
   emit("showMap", attractions);
 }
+
 </script>
 
 <template>
@@ -179,7 +189,11 @@ function onShowMap(attractions) {
           v-for="attraction in attractions"
           :key="attraction.contentId"
           :attraction="attraction"
+          @show-modal="onShowModal"
         ></PlaceListItem>
+        <PlaceDetail :attraction="modalAttraction" :category="modalCategory" @hide-modal="onHideModal"/>
+        
+        
         <PlacePageNavigation
           :currentPage="currentPage"
           :totalPage="totalPage"
