@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.attraction.controller;
 
 import com.ssafy.enjoytrip.attraction.model.AddrDto;
+import com.ssafy.enjoytrip.attraction.model.AttractionDetailDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionListDto;
 import com.ssafy.enjoytrip.attraction.model.service.AttractionService;
@@ -44,13 +45,13 @@ public class AttractionController {
         }
     }
 
-    @ApiOperation(value = "여행지 찾기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = AttractionDto.class)
+    @ApiOperation(value = "여행지 찾기", notes = "글번호에 해당하는 장소의 설명을 반환한다.", response = AttractionDto.class)
     @GetMapping("/place")
-    public ResponseEntity<?> getAttraction(@ApiParam(value = "여행지의 위도(lat), 경도(lon) 입력", required = true)
-                                                      @RequestParam Map<String, String> map) {
-        log.info("getAttraction - {}", map);
+    public ResponseEntity<?> getAttractionDetail(@ApiParam(value = "여행지의 아이디 입력", required = true)
+                                                      @RequestParam String aid) {
+        log.info("getAttractionDetail - {}", aid);
         try{
-            AttractionDto attractionDto = as.getAttraction(map);
+            AttractionDetailDto attractionDto = as.getAttractionDetail(aid);
             HttpHeaders header = new HttpHeaders();
             header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
             return ResponseEntity.ok().headers(header).body(attractionDto);
