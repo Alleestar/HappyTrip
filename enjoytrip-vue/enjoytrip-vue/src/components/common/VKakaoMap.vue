@@ -67,7 +67,7 @@ const loadMarkers = () => {
   // 현재 표시되어있는 marker들이 있다면 map에 등록된 marker를 제거한다.
   deleteMarkers();
 
-  // 마커 이미지를 생성합니다
+  // 마커 이미지를 생성합니다.
   //   const imgSrc = require("@/assets/map/markerStar.png");
   // 마커 이미지의 이미지 크기 입니다
   //   const imgSize = new kakao.maps.Size(24, 35);
