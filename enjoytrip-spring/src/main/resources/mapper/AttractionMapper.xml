@@ -10,8 +10,15 @@
         <result column="cat3" property="categoryCode"/>
         <result column="title" property="title"/>
         <result column="addr1" property="addr1"/>
+        <result column="first_image" property="img1"/>
+        <result column="first_image2" property="img2"/>
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
+    </resultMap>
+
+    <resultMap type="AttractionDetailDto" id="attractionDetail">
+        <result column="content_id" property="contentId"/>
+        <result column="overview" property="detail"/>
     </resultMap>
 
     <resultMap type="AddrDto" id="addr">
@@ -24,7 +31,8 @@
 
     <select id="listAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
-               i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude
+               i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
+               i.first_image as first_image, i.first_image2 as first_image2
         from (  select *
                 from attraction_info
                <where>
@@ -68,12 +76,19 @@
 
     <select id="getAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
-        i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude
+        i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
+        i.first_image as first_image, i.first_image2 as first_image2
         from (  select *
         from attraction_info
         where latitude = #{latitude} and longitude = #{longitude}
         ) i join attraction_detail d
         on i.content_id = d.content_id
+    </select>
+
+    <select id="getAttractionDetail" parameterType="int" resultMap="attractionDetail">
+        select content_id, overview
+        from attraction_description
+        where content_id = #{id}
     </select>
 
     <select  id="getAddr" resultMap="addr">

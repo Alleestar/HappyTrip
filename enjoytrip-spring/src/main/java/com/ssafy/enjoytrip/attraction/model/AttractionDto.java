@@ -9,6 +9,8 @@ public class AttractionDto {
     String categoryCode;
     String title;
     String addr1;
+    String img1;
+    String img2;
     double latitude;
     double longitude;
 }

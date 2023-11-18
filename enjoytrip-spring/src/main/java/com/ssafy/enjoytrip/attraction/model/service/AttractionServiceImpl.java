@@ -3,6 +3,7 @@ package com.ssafy.enjoytrip.attraction.model.service;
 import com.ssafy.enjoytrip.attraction.model.AddrDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionListDto;
+import com.ssafy.enjoytrip.attraction.model.AttractionDetailDto;
 import com.ssafy.enjoytrip.attraction.model.mapper.AttractionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,19 +57,29 @@ public class AttractionServiceImpl implements AttractionService{
 
     @Override
     @Transactional(readOnly = true)
-    public AttractionDto getAttraction(Map<String, String> map) throws Exception {
-        Map<String, Object> param = new HashMap<>();
-        if(map.get("lat") == null || map.get("lon") == null)
-            throw new RuntimeException("위치정보를 알려주세요.");
+    public AttractionDetailDto getAttractionDetail(String aid) throws Exception {
+        if(aid == null)
+            throw new RuntimeException("여행지 ID를 알려주세요.");
 
-        Double latitude = Double.parseDouble(map.get("lat"));
-        Double longitude = Double.parseDouble(map.get("lon"));
-
-        param.put("latitude", latitude);
-        param.put("longitude", longitude);
-
-        return am.getAttraction(param);
+        int id = Integer.parseInt(aid);
+        return am.getAttractionDetail(id);
     }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public AttractionDetailDto getAttractionDetail(String aid) throws Exception {
+//        Map<String, Object> param = new HashMap<>();
+//        if(map.get("lat") == null || map.get("lon") == null)
+//            throw new RuntimeException("위치정보를 알려주세요.");
+//
+//        Double latitude = Double.parseDouble(map.get("lat"));
+//        Double longitude = Double.parseDouble(map.get("lon"));
+//
+//        param.put("latitude", latitude);
+//        param.put("longitude", longitude);
+//
+//        return am.getAttraction(param);
+//    }
 
     @Override
     @Transactional(readOnly = true)
