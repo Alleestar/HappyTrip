@@ -14,7 +14,7 @@ getAddr(
   ({ data }) => {
     addrInfo.value = data;
   },
-  (error) => {
+  (error) => { 
     console.log(error);
   }
 );
@@ -66,15 +66,15 @@ function onPageChange(value) {
   searchList();
 }
 
-const modalAttraction = ref({})
+const emit = defineEmits(["showMap", "showModal"]);
+// const modalAttraction = ref({})
 const modalCategory = ref("")
-function onShowModal(attraction, category, available){
-  modalAttraction.value = attraction;
+function onShowModal(modalAttraction, category, available){
+  // modalAttraction.value = attraction;
   modalCategory.value = category.value;
+  emit("showModal", modalAttraction, modalCategory, available);
 }
 
-
-const emit = defineEmits(["showMap"]);
 function onShowMap(attractions) {
   emit("showMap", attractions);
 }
@@ -191,7 +191,7 @@ function onShowMap(attractions) {
           :attraction="attraction"
           @show-modal="onShowModal"
         ></PlaceListItem>
-        <PlaceDetail :attraction="modalAttraction" :category="modalCategory" @hide-modal="onHideModal"/>
+        <!-- <PlaceDetail :attraction="modalAttraction" :category="modalCategory"/> -->
         
         
         <PlacePageNavigation
