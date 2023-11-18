@@ -1,7 +1,7 @@
 <script setup>
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import PlaceList from "@/components/Place/PlaceList.vue";
-
+import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 import { ref } from "vue";
 
 // const chargingStations = ref([]);
@@ -20,18 +20,27 @@ const attractions = ref([]);
 function onShowMap(val) {
   attractions.value = val;
 }
+
+const attraction = ref({})
+const category = ref("")
+function onShowModal(modalAttraction, modalCategory, available) {
+  attraction.value = modalAttraction;
+  category.value = modalCategory.value;
+}
+
 </script>
 
 <template>
   <div id="body" style="height: 100vh">
     <aside class="d-flex" id="aside" style="height: 100%">
-      <PlaceList @show-map="onShowMap" />
+      <PlaceList @show-map="onShowMap" @show-modal="onShowModal" />
     </aside>
     <div id="map">
       <div class="container text-center mt-3">
-        <VKakaoMap :attractions="attractions" :selectStation="selectStation" />
+        <VKakaoMap :attractions="attractions" :selectStation="selectStation" @show-modal="onShowModal"/>
       </div>
     </div>
+    <PlaceDetail :attraction="attraction" :category="category"/>
   </div>
 </template>
 
