@@ -1,17 +1,17 @@
 <script setup>
-import { ref, onUpdated } from "vue";
+import { ref, watch } from "vue";
 import { describeAttraction } from "@/api/attraction.js";
 
 const props = defineProps({ attraction: Object, category: String });
 const desc = ref("");
 const available = ref("false");
 
-onUpdated(() => {
+watch(props, ()=>{
   available.value=true
   const params = {
   aid: props.attraction.contentId,
   };
-  getDesc(params);
+ getDesc(params);
 })
 
 const getDesc = (params)=>{describeAttraction(
