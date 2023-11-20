@@ -14,7 +14,7 @@ defineProps({ comment: Object });
         <img src="@/assets/user.png" style="width: 10px" />
       </div>
       <div class="ms-1 d-flex align-items-center">
-        <h6 class="medium m-0 comment-nickname">{{ comment.writer }}</h6>
+        <h6 class="medium m-0 comment-nickname">{{ comment.userNickname }}</h6>
       </div>
     </div>
     <div class="content my-1">
@@ -23,7 +23,7 @@ defineProps({ comment: Object });
       </p>
     </div>
     <div class="meta-article-info">
-      <p class="light meta-info text-secondary mb-0">{{ comment.createdDate }}</p>
+      <p class="light meta-info text-secondary mb-0">{{ comment.date }}</p>
     </div>
   </div>
 </template>

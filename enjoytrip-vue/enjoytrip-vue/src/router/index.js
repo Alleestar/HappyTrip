@@ -22,6 +22,7 @@ const router = createRouter({
       //   },
       // ],
     },
+
     {
       path: "/qna",
       name: "QnA",
@@ -47,6 +48,34 @@ const router = createRouter({
           path: "detail",
           name: "qna-detail",
           component: () => import("@/components/QnA/QnADetail.vue"),
+        },
+      ],
+    },
+    {
+      path: "/board",
+      name: "Board",
+      component: () => import("@/views/TheBoardView.vue"),
+      redirect: { name: "board-list" },
+      children: [
+        {
+          path: "list", // children 에서는 /가 붙기 때문에 빼야함
+          name: "board-list",
+          component: () => import("@/components/Board/BoardList.vue"),
+        },
+        {
+          path: "modify", // children 에서는 /가 붙기 때문에 빼야함
+          name: "board-modify",
+          component: () => import("@/components/Board/BoardModify.vue"),
+        },
+        {
+          path: "write",
+          name: "board-write",
+          component: () => import("@/components/Board/BoardWrite.vue"),
+        },
+        {
+          path: "detail",
+          name: "board-detail",
+          component: () => import("@/components/Board/BoardDetail.vue"),
         },
       ],
     },
