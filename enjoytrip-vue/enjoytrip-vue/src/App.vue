@@ -7,8 +7,7 @@ import TheFooter from "@/components/layout/TheFooter.vue";
 <template>
   <TheHeadingNavbar />
   <RouterView />
-  <TheFooter/>
+  <TheFooter />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
