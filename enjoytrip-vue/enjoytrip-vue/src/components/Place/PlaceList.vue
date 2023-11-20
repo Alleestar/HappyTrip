@@ -233,7 +233,7 @@ function onShowMap(attractions) {
   flex: 1;
 }
 
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -246,7 +246,7 @@ function onShowMap(attractions) {
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .container-no-content {
   display: flex;
