@@ -1,5 +1,8 @@
 package com.ssafy.enjoytrip.attraction.model.mapper;
 
+import com.ssafy.enjoytrip.attraction.model.AttractionListDto;
+import com.ssafy.enjoytrip.attraction.model.AttractionDetailDto;
+import com.ssafy.enjoytrip.attraction.model.AddrDto;
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,4 +17,6 @@ public interface AttractionMapper {
     int getTotalAttractionCount(Map<String, Object> param) throws SQLException;
 
     AttractionDto getAttraction(Map<String, Object> param) throws SQLException;
+    AttractionDetailDto getAttractionDetail(int id) throws SQLException;
+    List<AddrDto> getAddr() throws SQLException;
 }
