@@ -11,9 +11,16 @@ const router = createRouter({
       component: TheHomeView,
     },
     {
-      path: "/",
+      path: "/place",
       name: "place",
       component: ThePlaceView,
+      // children: [
+      //   {
+      //     path: "detail",
+      //     name: "place-detail",
+      //     component: () => import("@/views/PlaceDetail.vue"),
+      //   },
+      // ],
     },
     {
       path: "/qna",

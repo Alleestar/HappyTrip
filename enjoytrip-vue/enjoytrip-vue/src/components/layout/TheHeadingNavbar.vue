@@ -97,9 +97,10 @@
 }
 
 nav {
-  display: flex;
-  flex: 0.5;
+  /* display: flex; */
   width: 100%;
+  height: 70px;
+  background-color: white;
 }
 
 .navbar-toggler {

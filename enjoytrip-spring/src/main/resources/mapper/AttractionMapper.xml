@@ -7,20 +7,50 @@
     <resultMap type="AttractionDto" id="attraction">
         <result column="content_id" property="contentId"/>
         <result column="content_type_id" property="contentTypeId"/>
-        <result column="cat3" property="categoryCode"/>
+        <result column="cat1" property="cat1"/>
+        <result column="cat2" property="cat2"/>
+        <result column="cat3" property="cat3"/>
         <result column="title" property="title"/>
         <result column="addr1" property="addr1"/>
+        <result column="first_image" property="img1"/>
+        <result column="first_image2" property="img2"/>
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
+    </resultMap>
+
+    <resultMap type="AttractionDetailDto" id="attractionDetail">
+        <result column="content_id" property="contentId"/>
+        <result column="overview" property="detail"/>
+    </resultMap>
+
+    <resultMap type="AddrDto" id="addr">
+        <result column="sido_name" property="sidoName"/>
+        <result column="sido_code" property="sidoCode"/>
+        <result column="gugun_name" property="gugunName"/>
+        <result column="gugun_code" property="gugunCode"/>
     </resultMap>
 
 
     <select id="listAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
-               i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude
+               i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
+               i.first_image as first_image, i.first_image2 as first_image2, d.cat1 as cat1, d.cat2 as cat2
         from (  select *
                 from attraction_info
-                where title like concat('%', #{word}, '%') or addr1 like concat('%', #{word}, '%')
+               <where>
+                   <if test="word">
+                       and title like concat('%', #{word}, '%')
+                   </if>
+                   <if test="sidoCode">
+                       and sido_code = #{sidoCode}
+                   </if>
+                   <if test="gugunCode">
+                       and gugun_code = #{gugunCode}
+                   </if>
+                   <if test="contentTypeId">
+                       and content_type_id = #{contentTypeId}
+                   </if>
+               </where>
               ) i join attraction_detail d
         on i.content_id = d.content_id
         order by i.readcount desc
@@ -30,13 +60,26 @@
     <select id="getTotalAttractionCount" parameterType="map" resultType="int">
         select count(*)
         from attraction_info
-        where title like concat('%', #{word}, '%') or addr1 like concat('%', #{word}, '%')
-        limit #{start}, #{listsize}
+        <where>
+            <if test="word">
+                and title like concat('%', #{word}, '%')
+            </if>
+            <if test="sidoCode">
+                and sido_code = #{sidoCode}
+            </if>
+            <if test="gugunCode">
+                and gugun_code = #{gugunCode}
+            </if>
+            <if test="contentTypeId">
+                and content_type_id = #{contentTypeId}
+            </if>
+        </where>
     </select>
 
     <select id="getAttraction" parameterType="map" resultMap="attraction">
         select i.content_id as content_id, i.content_type_id as content_type_id, d.cat3 as cat3,
-        i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude
+        i.title as title, i.addr1 as addr1, i.latitude as latitude, i.longitude as longitude,
+        i.first_image as first_image, i.first_image2 as first_image2,  d.cat1 as cat1, d.cat2 as cat2
         from (  select *
         from attraction_info
         where latitude = #{latitude} and longitude = #{longitude}
@@ -44,5 +87,17 @@
         on i.content_id = d.content_id
     </select>
 
+    <select id="getAttractionDetail" parameterType="int" resultMap="attractionDetail">
+        select content_id, overview
+        from attraction_description
+        where content_id = #{id}
+    </select>
+
+    <select  id="getAddr" resultMap="addr">
+        select s.sido_code as sido_code, sido_name, gugun_code, gugun_name
+        from sido s join gugun g
+        on s.sido_code = g.sido_code
+        order by sido_code, gugun_code
+    </select>
 
 </mapper>
