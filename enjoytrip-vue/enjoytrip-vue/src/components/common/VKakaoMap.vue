@@ -5,23 +5,23 @@ const { VITE_TRIP_SERVICE_KEY } = import.meta.env;
 var map;
 const positions = ref([]);
 const markers = ref([]);
-// const infoWindows = ref([]);
+const infoWindows = ref([]);
 
 const props = defineProps({ attractions: Array, selectStation: Object });
 
-const emit = defineEmits(["showModal"])
-function onShowModal(modalAttraction){
+const emit = defineEmits(["showModal"]);
+function onShowModal(modalAttraction) {
   const param = ref({
-          numOfRows: 1,
-          pageNo: 1,
-          MobileOS: "ETC",
-          MobileApp: "EnjoyTrip",
-          contentTypeId: modalAttraction.contentTypeId,
-          cat1: modalAttraction.cat1,
-          cat2: modalAttraction.cat2,
-          cat3: modalAttraction.cat3,
-          _type: "json",
-          serviceKey: VITE_TRIP_SERVICE_KEY,
+    numOfRows: 1,
+    pageNo: 1,
+    MobileOS: "ETC",
+    MobileApp: "EnjoyTrip",
+    contentTypeId: modalAttraction.contentTypeId,
+    cat1: modalAttraction.cat1,
+    cat2: modalAttraction.cat2,
+    cat3: modalAttraction.cat3,
+    _type: "json",
+    serviceKey: VITE_TRIP_SERVICE_KEY,
   });
   getCat(param, modalAttraction);
 }
@@ -61,7 +61,7 @@ const getCat = (param, modalAttraction) => {
       if (data.response.body.items.item[0].name) {
         modalCategory.value = data.response.body.items.item[0].name;
         const available = ref(true);
-        emit("showModal",modalAttraction, modalCategory, available);
+        emit("showModal", modalAttraction, modalCategory, available);
       }
     },
     (error) => {
@@ -78,8 +78,7 @@ watch(
       props.attractions.forEach((attraction) => {
         let obj = {};
         obj.contentId = attraction.contentId;
-        obj.contentTypeId = attraction.contentTypeId,
-        obj.img1 = attraction.img1;
+        (obj.contentTypeId = attraction.contentTypeId), (obj.img1 = attraction.img1);
         obj.cat1 = attraction.cat1;
         obj.cat2 = attraction.cat2;
         obj.cat3 = attraction.cat3;
@@ -117,7 +116,7 @@ const loadMarkers = () => {
 
   // 마커를 생성합니다
   markers.value = [];
-  // infoWindows.value = [];
+  infoWindows.value = [];
   positions.value.forEach((position) => {
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
@@ -129,19 +128,20 @@ const loadMarkers = () => {
 
     const infoWindow = new kakao.maps.InfoWindow({
       position: position.latlng,
-      content:`<div style="display:flex; flex-direction: column; padding:5px; height:65px">
+      content: `<div style="display:flex; flex-direction: column; padding:5px; height:65px">
                   <p  class="medium mb-0 p-0" style="display:flex; flex-wrap:nowrap; font-size: 10px">${position.title}</p>
                   <div class="d-flex justify-content-center">
                   <button class="btn btn-dark medium p-1" style="font-size: 10px" id="openModalBtn${position.contentId}" data-bs-toggle="modal" data-bs-target="#placeDetail">상세보기</button>
                     </div>
-                  </div>`
-    })
+                  </div>`,
+    });
+    infoWindows.value.push(infoWindow);
     infoWindow.open(map, marker);
-    document.getElementById(`openModalBtn${position.contentId}`).addEventListener('click', () => {
+    document.getElementById(`openModalBtn${position.contentId}`).addEventListener("click", () => {
       // console.log("click");
       // console.log(position);
       onShowModal(position);
-  });
+    });
 
     markers.value.push(marker);
     // infoWindows.value.push(infoWindow);
@@ -160,6 +160,9 @@ const loadMarkers = () => {
 const deleteMarkers = () => {
   if (markers.value.length > 0) {
     markers.value.forEach((marker) => marker.setMap(null));
+  }
+  if (infoWindows.value.length > 0) {
+    infoWindows.value.forEach((infowindow) => infowindow.close());
   }
 };
 // const deleteInfoWindows = () => {
@@ -193,7 +196,6 @@ const deleteMarkers = () => {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
 }
-
 
 .heavy {
   font-family: "EASTARJET-Heavy";
