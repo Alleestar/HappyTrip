@@ -45,6 +45,11 @@
                   >검색</router-link
                 >
               </li>
+              <li>
+                <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'my-place' }"
+                  >My Place</router-link
+                >
+              </li>
             </ul>
           </li>
         </ul>
@@ -90,7 +95,7 @@
 </template>
 
 <style scoped>
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -98,7 +103,7 @@
 @font-face {
   font-family: "EASTARJET-Medium";
   src: url("/fonts/EASTARJET-Medium.ttf");
-}
+} */
 
 nav {
   /* display: flex; */
@@ -118,17 +123,17 @@ nav {
 
 .menu-font-sm {
   font-family: "EASTARJET-Medium";
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .logo-font {
   font-family: "EASTARJET-Heavy";
-  font-size: 15px;
+  font-size: 18px;
   margin: 0px;
 }
 
 .menu-font {
   font-family: "EASTARJET-Heavy";
-  font-size: 15px;
+  font-size: 18px;
 }
 </style>

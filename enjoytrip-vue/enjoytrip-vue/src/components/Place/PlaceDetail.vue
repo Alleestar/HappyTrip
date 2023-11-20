@@ -171,7 +171,7 @@ function openHeart() {
   height: 100%;
 }
 
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -184,7 +184,7 @@ function openHeart() {
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .detail-area {
   max-height: 200px;

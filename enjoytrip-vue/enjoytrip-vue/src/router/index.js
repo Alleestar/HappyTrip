@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TheHomeView from "@/views/TheHomeView.vue";
 import ThePlaceView from "@/views/ThePlaceView.vue";
+import MyPlaceView from "@/views/MyPlaceView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,7 +23,34 @@ const router = createRouter({
       //   },
       // ],
     },
-
+    {
+      path: "/myplace",
+      name: "my-place",
+      component: () => import("@/views/MyPlaceView.vue"),
+      redirect: { name: "mp-list" },
+      children: [
+        {
+          path: "list", // children 에서는 /가 붙기 때문에 빼야함
+          name: "mp-list",
+          component: () => import("@/components/MyPlace/MyPlaceList.vue"),
+        },
+        // {
+        //   path: "modify", // children 에서는 /가 붙기 때문에 빼야함
+        //   name: "mp-modify",
+        //   component: () => import("@/components/QnA/QnAModify.vue"),
+        // },
+        // {
+        //   path: "write",
+        //   name: "mp-write",
+        //   component: () => import("@/components/QnA/QnAWrite.vue"),
+        // },
+        // {
+        //   path: "detail",
+        //   name: "mp-detail",
+        //   component: () => import("@/components/QnA/QnADetail.vue"),
+        // },
+      ],
+    },
     {
       path: "/qna",
       name: "QnA",

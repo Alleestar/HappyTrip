@@ -74,7 +74,7 @@ function onShowModal(){
 </template>
 
 <style scoped>
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -87,7 +87,7 @@ function onShowModal(){
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .heavy {
   font-family: "EASTARJET-Heavy";
