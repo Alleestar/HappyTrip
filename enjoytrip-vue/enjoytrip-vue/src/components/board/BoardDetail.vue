@@ -1,41 +1,18 @@
 <script setup>
 import { ref, inject } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import QnACommentListItem from "@/components/QnA/item/QnACommentListItem.vue";
-import { detailQna, removeQna } from "@/api/qna.js";
-import {
-  listComment,
-  detailComment,
-  modifyComment,
-  savaComment,
-  deleteComment,
-} from "@/api/qnaComment.js";
+import BoardCommentListItem from "@/components/board/item/BoardCommentListItem.vue";
+import { detailBoard, removeBoard } from "@/api/board.js";
 const route = useRoute();
 const router = useRouter();
 function goToList() {
-  router.push({ name: "qna-list" });
+  router.push({ name: "board-list" });
 }
 const qid = ref(route.query.qid);
 const question = ref({});
-const searchComment = ref([]);
-
-function showCommentList() {
-  listComment(
-    qid.value,
-    ({ data }) => {
-      searchComment.value = data;
-      console.log(data);
-      console.log("댓글 불러오기 성공");
-    },
-    (error) => {
-      console.log("댓글 불러오기 에러 발생");
-    }
-  );
-}
-showCommentList();
 
 function goToDelete() {
-  removeQna(
+  removeBoard(
     qid.value,
     ({ data }) => {
       if (window.confirm("삭제되었습니다.")) {
@@ -52,12 +29,12 @@ function goToDelete() {
 
 function goToModify() {
   router.push({
-    name: "qna-modify",
+    name: "board-modify",
     state: question.value,
   });
 }
 
-detailQna(
+detailBoard(
   qid.value,
   ({ data }) => {
     question.value = data;
@@ -67,6 +44,13 @@ detailQna(
   }
 );
 
+const comments = inject("comments");
+const comment = ref(
+  comments.value.find((item) => item.qid == qid.value)
+    ? comments.value.find((item) => item.qid == qid.value)
+    : []
+);
+const searchComment = ref(comment);
 const commentContent = ref("");
 const commentDiv = ref(null);
 function goToWriteComment() {
@@ -80,24 +64,15 @@ function goToWriteComment() {
     alert(msg);
   } else {
     const c = {
-      postId: qid.value,
-      id: 454321,
+      qid: qid,
+      cid: comments.value.length,
       content: commentContent.value,
-      writer: "닉네임뭐하지",
+      userNickname: "닉네임뭐하지",
+      date: "2023.12.23 12:23",
     };
-
-    savaComment(
-      c,
-      ({ data }) => {
-        console.log("댓글 등록 성공");
-        showCommentList();
-      },
-      (error) => {
-        console.log("댓글 등록 실패");
-      }
-    );
-
-    // console.log("Comment Regist....comments:", comments.value);
+    comments.value.push(c);
+    searchComment.value.push(c);
+    console.log("Comment Regist....comments:", comments.value);
     commentContent.value = "";
   }
 }
@@ -113,7 +88,7 @@ function goToWriteComment() {
   <div class="row container-fluid m-1 d-flex align-content-start justify-content-center">
     <div class="col-10 mt-4">
       <div class="container p-3 border">
-        <h5 class="m-0" id="container-title">QnA</h5>
+        <h5 class="m-0" id="container-title">Board</h5>
       </div>
     </div>
     <div class="col-10 mt-2">
@@ -142,11 +117,11 @@ function goToWriteComment() {
         </div>
       </div>
       <div v-if="searchComment.length > 0">
-        <QnACommentListItem
+        <BoardCommentListItem
           v-for="c in searchComment"
-          :key="c.id"
+          :key="c.cid"
           :comment="c"
-        ></QnACommentListItem>
+        ></BoardCommentListItem>
       </div>
 
       <!-- qid: questions.value.length,

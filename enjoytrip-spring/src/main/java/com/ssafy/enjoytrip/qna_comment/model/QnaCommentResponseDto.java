@@ -1,10 +1,11 @@
 package com.ssafy.enjoytrip.qna_comment.model;
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class QnaCommentResponseDto {
 
     private Long id;                       // 댓글 번호 (PK)
