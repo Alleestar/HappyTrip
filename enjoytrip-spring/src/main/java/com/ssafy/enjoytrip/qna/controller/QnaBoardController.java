@@ -72,10 +72,10 @@ public class QnaBoardController {
     @ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = QnaDto.class)
     @GetMapping("/{Qnano}")
     public ResponseEntity<QnaDto> getQnA(
-            @PathVariable("QnAno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int QnAno)
+            @PathVariable("Qnano") @ApiParam(value = "얻어올 글의 글번호.", required = true) int Qnano)
             throws Exception {
-        log.info("getQnA - 호출 : " + QnAno);
-        return new ResponseEntity<QnaDto>(qnaService.getQna(QnAno), HttpStatus.OK);
+        log.info("getQnA - 호출 : " + Qnano);
+        return new ResponseEntity<QnaDto>(qnaService.getQna(Qnano), HttpStatus.OK);
     }
 
 

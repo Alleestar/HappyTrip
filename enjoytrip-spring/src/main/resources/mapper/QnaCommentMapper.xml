@@ -3,6 +3,15 @@
 
 <mapper namespace="com.ssafy.enjoytrip.qna_comment.model.mapper.QnaCommentMapper">
 
+    <resultMap type="QnaCommentResponseDto" id="comment">
+        <result column="id" property="id"/>
+        <result column="post_id" property="postId"/>
+        <result column="content" property="content"/>
+        <result column="writer" property="writer"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="modified_date" property="modifiedDate"/>
+    </resultMap>
+
     <!-- tb_comment 테이블 전체 컬럼 -->
     <sql id="commentColumns">
         id
@@ -15,13 +24,22 @@
     </sql>
 
 
+    <sql id="commentInsertColumns">
+        post_id
+        , content
+        , writer
+        , delete_yn
+        , created_date
+        , modified_date
+    </sql>
+
+
     <!-- 댓글 저장 -->
     <insert id="save" parameterType="QnaCommentRequestDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO qna_comment (
-        <include refid="commentColumns" />
+        <include refid="commentInsertColumns" />
         ) VALUES (
-        #{id}
-        , #{postId}
+        #{postId}
         , #{content}
         , #{writer}
         , 0
@@ -65,7 +83,7 @@
 
 
     <!-- 댓글 리스트 조회 -->
-    <select id="findAll" parameterType="long" resultType="QnaCommentResponseDto">
+    <select id="findAll" parameterType="long" resultMap="comment">
         SELECT
         <include refid="commentColumns" />
         FROM
@@ -73,8 +91,7 @@
         WHERE
         delete_yn = 0
         AND post_id = #{value}
-        ORDER BY
-        id DESC
+
     </select>
 
 </mapper>

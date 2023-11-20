@@ -63,7 +63,11 @@
               커뮤니티
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item menu-font-sm" href="#">자유</a></li>
+              <li>
+                <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'Board' }"
+                  >자유</router-link
+                >
+              </li>
               <li>
                 <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'QnA' }"
                   >QnA</router-link
