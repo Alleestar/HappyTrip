@@ -15,7 +15,7 @@ defineProps({ question: Object });
         <p class="light article-content mb-2">
           {{ question.content }}
         </p>
-        <div class="info">
+        <div class="infoo">
           <span class="meta-info text-secondary">{{ question.datetime }}</span>
           <span class="meta-info text-secondary"> ∙ </span>
           <span class="meta-info text-secondary">{{ question.userNickname }}</span>

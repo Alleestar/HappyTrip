@@ -44,11 +44,16 @@ const router = createRouter({
         //   name: "mp-write",
         //   component: () => import("@/components/QnA/QnAWrite.vue"),
         // },
-        // {
-        //   path: "detail",
-        //   name: "mp-detail",
-        //   component: () => import("@/components/QnA/QnADetail.vue"),
-        // },
+        {
+          path: "plan",
+          name: "mp-plan",
+          component: () => import("@/components/MyPlace/MyPlacePlan.vue"),
+        },
+        {
+          path: "love",
+          name: "mp-love",
+          component: () => import("@/components/MyPlace/MyPlaceLove.vue"),
+        },
       ],
     },
     {

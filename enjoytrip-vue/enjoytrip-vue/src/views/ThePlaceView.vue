@@ -5,7 +5,7 @@ import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 import { ref } from "vue";
 
 // const chargingStations = ref([]);
-const selectStation = ref({});
+const selectAttraction = ref({});
 
 const currentPage = ref(1);
 const totalPage = ref(1);
@@ -21,13 +21,13 @@ function onShowMap(val) {
   attractions.value = val;
 }
 
-const attraction = ref({})
-const category = ref("")
+const attraction = ref({});
+const category = ref("");
 function onShowModal(modalAttraction, modalCategory, available) {
   attraction.value = modalAttraction;
+  selectAttraction.value = modalAttraction;
   category.value = modalCategory.value;
 }
-
 </script>
 
 <template>
@@ -37,10 +37,14 @@ function onShowModal(modalAttraction, modalCategory, available) {
     </aside>
     <div id="map">
       <div class="container text-center mt-3">
-        <VKakaoMap :attractions="attractions" :selectStation="selectStation" @show-modal="onShowModal"/>
+        <VKakaoMap
+          :attractions="attractions"
+          :selectAttraction="selectAttraction"
+          @show-modal="onShowModal"
+        />
       </div>
     </div>
-    <PlaceDetail :attraction="attraction" :category="category"/>
+    <PlaceDetail :attraction="attraction" :category="category" />
   </div>
 </template>
 
