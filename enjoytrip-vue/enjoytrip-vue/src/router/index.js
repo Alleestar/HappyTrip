@@ -14,13 +14,6 @@ const router = createRouter({
       path: "/place",
       name: "place",
       component: ThePlaceView,
-      // children: [
-      //   {
-      //     path: "detail",
-      //     name: "place-detail",
-      //     component: () => import("@/views/PlaceDetail.vue"),
-      //   },
-      // ],
     },
 
     {
@@ -30,12 +23,12 @@ const router = createRouter({
       redirect: { name: "qna-list" },
       children: [
         {
-          path: "list", // children 에서는 /가 붙기 때문에 빼야함
+          path: "list",
           name: "qna-list",
           component: () => import("@/components/QnA/QnAList.vue"),
         },
         {
-          path: "modify", // children 에서는 /가 붙기 때문에 빼야함
+          path: "modify",
           name: "qna-modify",
           component: () => import("@/components/QnA/QnAModify.vue"),
         },
@@ -58,12 +51,12 @@ const router = createRouter({
       redirect: { name: "board-list" },
       children: [
         {
-          path: "list", // children 에서는 /가 붙기 때문에 빼야함
+          path: "list",
           name: "board-list",
           component: () => import("@/components/Board/BoardList.vue"),
         },
         {
-          path: "modify", // children 에서는 /가 붙기 때문에 빼야함
+          path: "modify",
           name: "board-modify",
           component: () => import("@/components/Board/BoardModify.vue"),
         },
