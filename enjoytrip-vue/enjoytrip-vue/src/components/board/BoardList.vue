@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 import BoardListItem from "@/components/Board/item/BoardListItem.vue";
 import { useRouter } from "vue-router";
 import { listBoard } from "@/api/board.js";
 
-const questions = ref([]);
+const boards = ref([]);
 
 // 화면 이동
 const router = useRouter();
@@ -18,6 +18,7 @@ const currentPage = ref(1);
 const totalPage = ref(1);
 const key = ref("");
 const word = ref("");
+
 const params = {
   pgno: 1,
   spp: import.meta.env.VITE_ARTICLE_LIST_SIZE,
@@ -25,13 +26,14 @@ const params = {
   word: word.value,
 };
 
-function searchList() {
+const searchList = async () => {
   params.key = key.value;
   params.word = word.value;
-  listBoard(
+  await listBoard(
     params,
     ({ data }) => {
-      questions.value = data.Boards;
+      console.log(data);
+      boards.value = data.boards;
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
     },
@@ -39,7 +41,7 @@ function searchList() {
       console.log(error);
     }
   );
-}
+};
 
 function refresh() {
   key.value = "";
@@ -50,7 +52,7 @@ function refresh() {
   listBoard(
     params,
     ({ data }) => {
-      questions.value = data.Boards;
+      boards.value = data.Boards;
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
     },
@@ -65,7 +67,9 @@ function onPageChange(value) {
   searchList();
 }
 
-searchList();
+onMounted(() => {
+  searchList();
+});
 </script>
 
 <template>
@@ -103,18 +107,14 @@ searchList();
         </div>
       </div>
     </div>
-    <div class="col-10 my-1 mx-auto" v-if="questions.length > 0">
+    <div class="col-10 my-1 mx-auto" v-if="boards.length > 0">
       <div class="container px-0 d-flex flex-column justify-content-center">
         <div class="mx-auto">
           <div class="d-flex justify-content-start mx-1 mb-2">
             <button class="btn btn-outline-dark" id="write-btn" @click="goToWrite">글 작성</button>
           </div>
         </div>
-        <BoardListItem
-          v-for="question in questions"
-          :key="question.boardNo"
-          :question="question"
-        ></BoardListItem>
+        <BoardListItem v-for="board in boards" :key="board.boardNo" :board="board"></BoardListItem>
         <PageNavigation
           :currentPage="currentPage"
           :total-page="totalPage"

@@ -1,15 +1,18 @@
 <script setup>
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BoardCommentListItem from "@/components/board/item/BoardCommentListItem.vue";
 import { detailBoard, removeBoard } from "@/api/board.js";
+import { listComment, savaComment } from "@/api/boardComment.js";
+
 const route = useRoute();
 const router = useRouter();
 function goToList() {
   router.push({ name: "board-list" });
 }
 const qid = ref(route.query.qid);
-const question = ref({});
+const board = ref({});
+const searchComment = ref([]);
 
 function goToDelete() {
   removeBoard(
@@ -30,27 +33,35 @@ function goToDelete() {
 function goToModify() {
   router.push({
     name: "board-modify",
-    state: question.value,
+    state: board.value,
   });
 }
 
 detailBoard(
   qid.value,
   ({ data }) => {
-    question.value = data;
+    board.value = data;
   },
   (error) => {
     console.log(error);
   }
 );
 
-const comments = inject("comments");
-const comment = ref(
-  comments.value.find((item) => item.qid == qid.value)
-    ? comments.value.find((item) => item.qid == qid.value)
-    : []
-);
-const searchComment = ref(comment);
+function showCommentList() {
+  listComment(
+    qid.value,
+    ({ data }) => {
+      searchComment.value = data;
+      console.log(data);
+      console.log("댓글 불러오기 성공");
+    },
+    (error) => {
+      console.log("댓글 불러오기 에러 발생");
+    }
+  );
+}
+showCommentList();
+
 const commentContent = ref("");
 const commentDiv = ref(null);
 function goToWriteComment() {
@@ -64,24 +75,27 @@ function goToWriteComment() {
     alert(msg);
   } else {
     const c = {
-      qid: qid,
-      cid: comments.value.length,
+      postId: qid.value,
+      id: 454321,
       content: commentContent.value,
-      userNickname: "닉네임뭐하지",
-      date: "2023.12.23 12:23",
+      writer: "닉네임뭐하지",
     };
-    comments.value.push(c);
-    searchComment.value.push(c);
-    console.log("Comment Regist....comments:", comments.value);
+
+    savaComment(
+      c,
+      ({ data }) => {
+        console.log("댓글 등록 성공");
+        showCommentList();
+      },
+      (error) => {
+        console.log("댓글 등록 실패");
+      }
+    );
+
+    // console.log("Comment Regist....comments:", comments.value);
     commentContent.value = "";
   }
 }
-
-//   <!-- qid: questions.value.length,
-//  cid:
-//  content: content.value,
-//  userNickname: "테스트닉네임",
-//  date: "2023.11.13 12:12", -->
 </script>
 
 <template>
@@ -96,30 +110,30 @@ function goToWriteComment() {
         <div class="meta-usr-info d-flex">
           <div><img src="@/assets/user.png" style="width: 35px" /></div>
           <div class="ms-2">
-            <h6 class="medium m-0 mb-1">{{ question.userNickname }}</h6>
-            <p class="light meta-info text-secondary">{{ question.datetime }}</p>
+            <h6 class="medium m-0 mb-1">{{ board.userNickname }}</h6>
+            <p class="light meta-info text-secondary">{{ board.datetime }}</p>
           </div>
         </div>
         <div class="title">
-          <h6 class="heavy m-0">{{ question.title }}</h6>
+          <h6 class="heavy m-0">{{ board.title }}</h6>
         </div>
         <div class="content my-1">
           <p class="medium content-font my-0">
-            {{ question.content }}
+            {{ board.content }}
           </p>
         </div>
         <div class="meta-article-info">
           <span class="light meta-info">조회</span>
-          <span class="light meta-info">{{ question.readCnt }}</span>
+          <span class="light meta-info">{{ board.readCnt }}</span>
           <span class="light meta-info"> ∙ </span>
           <span class="light meta-info">댓글</span>
-          <span class="light meta-info">{{ question.commentCnt }}</span>
+          <span class="light meta-info">{{ board.commentCnt }}</span>
         </div>
       </div>
       <div v-if="searchComment.length > 0">
         <BoardCommentListItem
           v-for="c in searchComment"
-          :key="c.cid"
+          :key="c.id"
           :comment="c"
         ></BoardCommentListItem>
       </div>
