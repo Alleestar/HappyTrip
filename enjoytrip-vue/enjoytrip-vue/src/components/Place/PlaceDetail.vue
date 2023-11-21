@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { describeAttraction } from "@/api/attraction.js";
 
+const attr = ref({});
 const props = defineProps({ attraction: Object, category: String });
 const desc = ref("");
 const available = ref("false");
@@ -11,11 +12,13 @@ const currentPlaneColor = ref("gray");
 watch(props, () => {
   available.value = true;
   currentColor.value = "gray";
+  attr.value = props.attraction;
   const params = {
     aid: props.attraction.contentId,
   };
   getDesc(params);
 });
+
 
 const getDesc = (params) => {
   describeAttraction(
@@ -29,21 +32,12 @@ const getDesc = (params) => {
   );
 };
 
-const isOpen = ref(false);
+function resetModal(){
+  attr.value = {}
+  desc.value = ""
+}
+
 const isPlaneOpen = ref(false);
-function closeHeart() {
-  isOpen.value = false;
-}
-
-function setHeart(color) {
-  currentColor.value = color;
-  closeHeart();
-}
-
-function openHeart() {
-  isOpen.value = true;
-}
-
 function closePlane() {
   isPlaneOpen.value = false;
 }
@@ -63,14 +57,14 @@ function openPlane() {
     <div class="modal-dialog">
       <div class="modal-content" v-if="available">
         <div class="modal-header p-0 mt-4 mx-4" style="display: flex; flex-direction: column">
-          <div class="img-area" style="display: flex; align-items: center" v-if="attraction.img1">
+          <div class="img-area" style="display: flex; align-items: center" v-if="attr.img1">
             <div class="img-shape mb-3">
-              <img style="width: 100%" :src="attraction.img1" />
+              <img style="width: 100%" :src="attr.img1" />
             </div>
           </div>
           <div class="info-area">
             <div>
-              <h4 class="medium my-0 me-2" style="font-size: 22px">{{ attraction.title }}</h4>
+              <h4 class="medium my-0 me-2" style="font-size: 22px">{{ attr.title }}</h4>
             </div>
             <div class="d-flex align-items-end">
               <p class="light m-0" style="font-size: 13px">{{ category }}</p>
@@ -86,42 +80,6 @@ function openPlane() {
         <!-- Modal footer -->
         <div class="modal-footer" style="display: flex; justify-content: space-between">
           <div id="list-area">
-            <div class="dropdown">
-              <button
-                class="btn btn-heart dropdown-toggle"
-                @click="openHeart"
-                data-bs-toggle="dropdown"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="20"
-                  :fill="currentColor"
-                  class="bi bi-heart"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-                  />
-                </svg>
-              </button>
-              <ul
-                v-if="isOpen"
-                class="dropdown-menu"
-                style="display: flex; justify-content: space-evenly"
-              >
-                <li>
-                  <a
-                    class="ball"
-                    style="background-color: #f23557"
-                    @click="setHeart('#F23557')"
-                    href="#"
-                  ></a>
-                </li>
-              </ul>
-            </div>
-
             <div class="dropdown">
               <button
                 class="btn btn-plane dropdown-toggle"
@@ -158,7 +116,7 @@ function openPlane() {
             </div>
           </div>
 
-          <button class="btn-close" data-bs-dismiss="modal"></button>
+          <button class="btn-close" data-bs-dismiss="modal" @click="resetModal"></button>
         </div>
       </div>
     </div>

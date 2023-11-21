@@ -23,7 +23,7 @@ function onShowMap(val) {
 
 const attraction = ref({});
 const category = ref("");
-function onShowModal(modalAttraction, modalCategory, available) {
+function onShowModal(modalAttraction, modalCategory) {
   attraction.value = modalAttraction;
   selectAttraction.value = modalAttraction;
   category.value = modalCategory.value;
@@ -44,6 +44,7 @@ function onShowModal(modalAttraction, modalCategory, available) {
         />
       </div>
     </div>
+    <!-- modal -->
     <PlaceDetail :attraction="attraction" :category="category" />
   </div>
 </template>

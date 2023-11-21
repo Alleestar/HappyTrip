@@ -69,10 +69,10 @@ function onPageChange(value) {
 const emit = defineEmits(["showMap", "showModal"]);
 // const modalAttraction = ref({})
 const modalCategory = ref("")
-function onShowModal(modalAttraction, category, available){
+function onShowModal(modalAttraction, category){
   // modalAttraction.value = attraction;
   modalCategory.value = category.value;
-  emit("showModal", modalAttraction, modalCategory, available);
+  emit("showModal", modalAttraction, modalCategory);
 }
 
 function onShowMap(attractions) {
