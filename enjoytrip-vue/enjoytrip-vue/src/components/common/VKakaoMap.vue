@@ -5,7 +5,8 @@ const { VITE_TRIP_SERVICE_KEY } = import.meta.env;
 var map;
 const positions = ref([]);
 const markers = ref([]);
-const infoWindows = ref([]);
+const keys = ref([]);
+const infoWindows = ref(new Map());
 
 const props = defineProps({ attractions: Array, selectAttraction: Object });
 
@@ -30,11 +31,28 @@ watch(
   () => props.selectAttraction,
   () => {
     // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(
+    var moveLatLon;
+    if(props.selectAttraction.latitude){
+      moveLatLon = new kakao.maps.LatLng(
       props.selectAttraction.latitude,
       props.selectAttraction.longitude
-    );
-
+      );
+      // console.log(props.selectAttraction.contentId)
+      infoWindows.value.get(props.selectAttraction.contentId).setMap(map);
+      document.getElementById(`openModalBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
+        onShowModal(props.selectAttraction);
+      });
+      document.getElementById(`closeBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
+        infoWindows.value.get(props.selectAttraction.contentId).setMap(null);
+      });
+    } else {
+      moveLatLon = new kakao.maps.LatLng(
+      props.selectAttraction.latlng.Ma,
+      props.selectAttraction.latlng.La
+      );
+      
+    }
+    
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
@@ -63,12 +81,12 @@ const getCat = (param, modalAttraction) => {
     ({ data }) => {
       if (data.response.body.items.item[0].name) {
         modalCategory.value = data.response.body.items.item[0].name;
-        const available = ref(true);
-        emit("showModal", modalAttraction, modalCategory, available);
+        emit("showModal", modalAttraction, modalCategory);
       }
     },
     (error) => {
       console.log(error);
+      emit("showModal", modalAttraction, "");
     }
   );
 };
@@ -119,7 +137,8 @@ const loadMarkers = () => {
 
   // 마커를 생성합니다
   markers.value = [];
-  infoWindows.value = [];
+  keys.value = [];
+  infoWindows.value = new Map();
   positions.value.forEach((position) => {
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
@@ -149,7 +168,8 @@ const loadMarkers = () => {
                 </div>`,
     });
 
-    infoWindows.value.push(infoWindow);
+    keys.value.push(position.contentId);
+    infoWindows.value.set(position.contentId ,infoWindow);
     kakao.maps.event.addListener(marker, "click", function () {
       infoWindow.setMap(map);
       document.getElementById(`openModalBtn${position.contentId}`).addEventListener("click", () => {
@@ -178,8 +198,9 @@ const deleteMarkers = () => {
   if (markers.value.length > 0) {
     markers.value.forEach((marker) => marker.setMap(null));
   }
-  if (infoWindows.value.length > 0) {
-    infoWindows.value.forEach((infowindow) => infowindow.setMap(null));
+  if (keys.value.length > 0) {
+    keys.value.forEach((key) => infoWindows.get(key).setMap(null));
+    keys.value = [];
   }
 };
 // const deleteInfoWindows = () => {

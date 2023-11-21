@@ -48,7 +48,7 @@ onMounted(() => {
     <div class="col-10 mt-4">
       <div class="container p-4 border" style="display: flex">
         <div class="card me-3" style="background-color: blue; border: none; width: 32px"></div>
-        <h5 id="mp-container-title">[[My Place: 좋아하는 여행지]]</h5>
+        <h5 id="mp-container-title">[[My Place: 여행계획 1]]</h5>
       </div>
     </div>
     <div class="col-10 mt-4">
@@ -76,7 +76,7 @@ onMounted(() => {
         <button class="btn day-btn">▶</button>
       </div>
     </div>
-    <div class="col-10 mt-4">
+    <div class="col-10 my-4">
       <div class="container" style="display: flex">
         <div class="mx-1" id="map-area" style="flex: 5; width: 500px; height: 500px">
           <VKakaoMap

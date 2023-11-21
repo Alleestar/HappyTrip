@@ -41,8 +41,7 @@ const getCat = () => {
 const emit = defineEmits(["showModal"])
 function onShowModal(){
   const attraction = props.attraction;
-  const available = ref(true);
-  emit("showModal", attraction, category, available);
+  emit("showModal", attraction, category);
 }
 </script>
 
