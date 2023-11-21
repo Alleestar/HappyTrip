@@ -53,22 +53,22 @@ const router = createRouter({
         {
           path: "list",
           name: "board-list",
-          component: () => import("@/components/Board/BoardList.vue"),
+          component: () => import("@/components/board/BoardList.vue"),
         },
         {
           path: "modify",
           name: "board-modify",
-          component: () => import("@/components/Board/BoardModify.vue"),
+          component: () => import("@/components/board/BoardModify.vue"),
         },
         {
           path: "write",
           name: "board-write",
-          component: () => import("@/components/Board/BoardWrite.vue"),
+          component: () => import("@/components/board/BoardWrite.vue"),
         },
         {
           path: "detail",
           name: "board-detail",
-          component: () => import("@/components/Board/BoardDetail.vue"),
+          component: () => import("@/components/board/BoardDetail.vue"),
         },
       ],
     },
