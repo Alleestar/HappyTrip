@@ -26,7 +26,7 @@ const router = createRouter({
     },
     {
       path: "/myplace",
-      name: "my-place", 
+      name: "my-place",
       component: MyPlaceView,
       redirect: { name: "mp-plan-list" },
       children: [
@@ -38,9 +38,10 @@ const router = createRouter({
       ],
     },
     {
-      path: "/myplace/plan",
-      name: "mp-plan", 
+      path: "/myplan/:id",
+      name: "my-plan",
       component: MyPlacePlanView,
+      props: true,
       // children: [
       //   {
       //     path: "plan", // children 에서는 /가 붙기 때문에 빼야함

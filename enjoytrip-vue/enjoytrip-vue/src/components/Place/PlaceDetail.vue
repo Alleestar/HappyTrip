@@ -1,24 +1,23 @@
 <script setup>
 import { ref, watch } from "vue";
 import { describeAttraction } from "@/api/attraction.js";
+import PlacePlanListItem from "@/components/Place/item/PlacePlanListItem.vue";
+import { listPlanMeta, createPlanMeta } from "@/api/plan.js";
 
 const attr = ref({});
 const props = defineProps({ attraction: Object, category: String });
 const desc = ref("");
 const available = ref("false");
+const planList = ref([]);
 
-const currentColor = ref("gray");
-const currentPlaneColor = ref("gray");
 watch(props, () => {
   available.value = true;
-  currentColor.value = "gray";
   attr.value = props.attraction;
   const params = {
     aid: props.attraction.contentId,
   };
   getDesc(params);
 });
-
 
 const getDesc = (params) => {
   describeAttraction(
@@ -32,9 +31,9 @@ const getDesc = (params) => {
   );
 };
 
-function resetModal(){
-  attr.value = {}
-  desc.value = ""
+function resetModal() {
+  attr.value = {};
+  desc.value = "";
 }
 
 const isPlaneOpen = ref(false);
@@ -42,13 +41,53 @@ function closePlane() {
   isPlaneOpen.value = false;
 }
 
-function setPlane(color) {
-  currentPlaneColor.value = color;
-  closePlane();
-}
+// function setPlane(color) {
+//   currentPlaneColor.value = color;
+//   closePlane();
+// }
 
 function openPlane() {
-  isPlaneOpen.value = true;
+  isPlaneOpen.value = !isPlaneOpen.value;
+}
+
+function makeNewPlanList() {
+  const planMeta = {
+    userId: 1,
+  };
+  createPlanMeta(
+    planMeta,
+    ({ data }) => {
+      loadPlanList();
+    },
+    (error) => {
+      console.log("error");
+    }
+  );
+}
+loadPlanList();
+function loadPlanList() {
+  const planMeta = {
+    userId: 1,
+  };
+  listPlanMeta(
+    planMeta,
+    ({ data }) => {
+      planList.value = data.plans;
+    },
+    (error) => {
+      console.log("error");
+    }
+  );
+}
+
+function getToday() {
+  let today = new Date();
+  let year = today.getFullYear();
+  let month = ("0" + (today.getMonth() + 1)).slice(-2);
+  let day = ("0" + today.getDate()).slice(-2);
+
+  let dateString = year + "/" + month + "/" + day;
+  return dateString;
 }
 </script>
 
@@ -90,7 +129,7 @@ function openPlane() {
                   xmlns="http://www.w3.org/2000/svg"
                   width="21"
                   height="20"
-                  :fill="currentPlaneColor"
+                  fill="gray"
                   class="bi bi-airplane-fill"
                   viewBox="0 0 16 16"
                 >
@@ -101,16 +140,41 @@ function openPlane() {
               </button>
               <ul
                 v-if="isPlaneOpen"
-                class="dropdown-menu"
-                style="display: flex; justify-content: space-evenly"
+                class="dropdown-menu px-2"
+                style="display: flex; justify-content: start"
               >
-                <li>
+                <PlacePlanListItem
+                  v-for="plan in planList"
+                  :key="plan.planId"
+                  :plan="plan"
+                  :attraction="attraction"
+                />
+                <!-- <li>
                   <a
                     class="ball"
                     style="background-color: #f23557"
                     @click="setPlane('#F23557')"
                     href="#"
                   ></a>
+                </li> -->
+                <li class="mx-1">
+                  <a class="ball" @click="makeNewPlanList">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="20"
+                      fill="gray"
+                      class="bi bi-plus-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+                      />
+                      <path
+                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
+                      />
+                    </svg>
+                  </a>
                 </li>
               </ul>
             </div>

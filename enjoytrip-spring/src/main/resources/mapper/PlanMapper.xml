@@ -1,0 +1,109 @@
+<!-- resources/mapper/QnaService/QnaServiceMapper.xml -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.plan.model.mapper.PlanMapper">
+
+    <resultMap type="PlanMetaDto" id="planMeta">
+        <result column="plan_id" property="planId"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="color" property="color"/>
+    </resultMap>
+
+    <resultMap type="PlanContentDto" id="planContent">
+        <result column="plan_content_id" property="planContentId"/>
+        <result column="plan_id" property="planId"/>
+        <result column="cost" property="cost"/>
+        <result column="memo" property="memo"/>
+        <result column="date" property="date"/>
+        <result column="sorting_meta_info" property="sortingMetaInfo"/>
+        <result column="content_id" property="attractionContentId"/>
+        <result column="content_type_id" property="attractionContentTypeId"/>
+        <result column="cat1" property="cat1"/>
+        <result column="cat2" property="cat2"/>
+        <result column="cat3" property="cat3"/>
+        <result column="title" property="title"/>
+        <result column="addr1" property="addr1"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+    </resultMap>
+
+    <!-- PlanMeta: 여행계획 정보-->
+    <select id="listPlanMeta" parameterType="string" resultMap="planMeta">
+        select *
+        from plan_meta
+        <where>
+            user_id = #{id}
+            <if test="word">
+                and title like concat('%', #{word}, '%')
+            </if>
+            <if test="userId">
+                and user_id = #{userId}
+            </if>
+        </where>
+        limit #{start}, #{listsize}
+    </select>
+
+    <select id="getPlanMetaByPlanId" parameterType="long" resultMap="planMeta">
+        select *
+        from plan_meta
+        where plan_id = #{plan_id}
+    </select>
+
+    <select id="getTotalPlanMeta" parameterType="map" resultType="int">
+        select count(*)
+        from plan_meta
+        <where>
+            user_id = #{id}
+            <if test="word">
+                and title like concat('%', #{word}, '%')
+            </if>
+            <if test="userId">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="createPlanMeta" parameterType="PlanMetaDto">
+        insert into plan_meta (user_id, title, start_date, end_date, color)
+        values (#{userId}, date_format(now(), '%Y/%m/%d'), date_format(now(), '%Y/%m/%d'), date_format(now(), '%Y/%m/%d'), #{color})
+    </insert>
+
+    <update id="modifyPlanMeta" parameterType="PlanMetaDto">
+        update plan_meta set title = #{title}, start_date = #{startDate}, end_date = #{endDate}
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deletePlanMetaById" parameterType="Long">
+        delete from plan_meta
+        where plan_id = #{planId}
+    </delete>
+
+    <!-- PlanContent: 여행계획 세부정보-->
+    <select id="listPlanContent" parameterType="map" resultMap="planContent">
+        select p.plan_content_id as plan_content_id, p.plan_id as plan_id, p.cost as cost, p.memo as memo, p.date as date,
+        p.sorting_meta_info as sorting_meta_info, a.content_id as content_id, a.content_type_id as content_type_id,
+        a.title as title, a.addr1 as addr1, a.latitude as latitude, a.longitude as longitude
+        from plan_content p join attraction_info a
+        on p.attraction_id = a.content_id
+        where p.plan_id = #{planId} and p.date = #{date}
+    </select>
+
+    <insert id="createPlanContent" parameterType="PlanContentDto">
+        insert into plan_content (plan_id, attraction_id, cost, memo, date, sorting_meta_info)
+        values (#{planId}, #{attractionContentId}, #{cost}, #{memo}, #{date}, #{sortingMetaInfo})
+    </insert>
+
+    <update id="modifyPlanContent" parameterType="PlanContentDto">
+        update plan_content set cost = #{cost}, date = #{date}, memo = #{memo}, sorting_meta_info = #{sortingMetaInfo}
+        where plan_content_id = #{planContentId}
+    </update>
+
+    <delete id="deletePlanContentById" parameterType="Long">
+        delete from plan_content
+        where plan_content_id = #{planContentId}
+    </delete>
+</mapper>

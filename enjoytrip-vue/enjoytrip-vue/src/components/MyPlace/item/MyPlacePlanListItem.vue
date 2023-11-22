@@ -1,24 +1,32 @@
 <script setup>
-defineProps({plan: Object})
+const props = defineProps({ plan: Object });
 </script>
 
 <template>
-    <td>
-        <router-link class="card"
-            style="width: 200px; height: 200px; background-color: black; text-decoration: none"
-            :to="{ name: 'mp-plan' }" v-if="plan"
-        >
-            <div class="card-body p-0 d-flex justify-content-center align-items-center">
-            <h4 class="card-title m-0 heavy list-title">{{plan.title}}</h4>
-            </div>
-        </router-link>
-    </td>
+  <td>
+    <router-link
+      class="card my-card"
+      :style="{ backgroundColor: plan.color }"
+      :to="{ name: 'my-plan', params: { id: plan.planId } }"
+      v-if="plan"
+    >
+      <div class="card-body p-0 d-flex justify-content-center align-items-center">
+        <h4 class="card-title m-0 heavy list-title">{{ plan.title }}</h4>
+      </div>
+    </router-link>
+  </td>
 </template>
 
 <style scoped>
 .list-title {
   font-family: "EASTARJET-Medium";
   color: white;
+}
+
+.my-card {
+  width: 200px;
+  height: 200px;
+  text-decoration: none;
 }
 
 @font-face {
