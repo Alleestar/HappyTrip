@@ -42,6 +42,11 @@ const router = createRouter({
           name: "qna-detail",
           component: () => import("@/components/QnA/QnADetail.vue"),
         },
+        {
+          path: "qnacommentdetail",
+          name: "qna-comment-modify",
+          component: () => import("@/components/QnA/item/QnACommentModify.vue"),
+        },
       ],
     },
     {
@@ -69,6 +74,11 @@ const router = createRouter({
           path: "detail",
           name: "board-detail",
           component: () => import("@/components/board/BoardDetail.vue"),
+        },
+        {
+          path: "boardcommentdetail",
+          name: "board-comment-modify",
+          component: () => import("@/components/board/item/BoardCommentModify.vue"),
         },
       ],
     },
