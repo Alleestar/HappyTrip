@@ -23,6 +23,7 @@ const endRange = computed(() => {
 function range(start, end) {
   const list = [];
   for (let i = start; i <= end; i++) list.push(i);
+  console.log(start, end, list);
   return list;
 }
 

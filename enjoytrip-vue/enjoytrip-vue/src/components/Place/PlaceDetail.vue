@@ -9,8 +9,12 @@ const props = defineProps({ attraction: Object, category: String });
 const desc = ref("");
 const available = ref("false");
 const planList = ref([]);
+const isPlaneOpen = ref(false);
 
 watch(props, () => {
+  attr.value = {};
+  desc.value = "";
+  isPlaneOpen.value = false;
   available.value = true;
   attr.value = props.attraction;
   const params = {
@@ -34,10 +38,6 @@ const getDesc = (params) => {
 function resetModal() {
   attr.value = {};
   desc.value = "";
-}
-
-const isPlaneOpen = ref(false);
-function closePlane() {
   isPlaneOpen.value = false;
 }
 
@@ -46,7 +46,7 @@ function closePlane() {
 //   closePlane();
 // }
 
-function openPlane() {
+function planeBtn() {
   isPlaneOpen.value = !isPlaneOpen.value;
 }
 
@@ -122,7 +122,7 @@ function getToday() {
             <div class="dropdown">
               <button
                 class="btn btn-plane dropdown-toggle"
-                @click="openPlane"
+                @click="planeBtn"
                 data-bs-toggle="dropdown"
               >
                 <svg
@@ -149,14 +149,6 @@ function getToday() {
                   :plan="plan"
                   :attraction="attraction"
                 />
-                <!-- <li>
-                  <a
-                    class="ball"
-                    style="background-color: #f23557"
-                    @click="setPlane('#F23557')"
-                    href="#"
-                  ></a>
-                </li> -->
                 <li class="mx-1">
                   <a class="ball" @click="makeNewPlanList">
                     <svg

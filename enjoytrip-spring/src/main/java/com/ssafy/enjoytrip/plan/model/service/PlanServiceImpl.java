@@ -4,8 +4,6 @@ import com.ssafy.enjoytrip.plan.model.PlanContentDto;
 import com.ssafy.enjoytrip.plan.model.PlanMetaDto;
 import com.ssafy.enjoytrip.plan.model.PlanMetaListDto;
 import com.ssafy.enjoytrip.plan.model.mapper.PlanMapper;
-import com.ssafy.enjoytrip.qna.model.QnaDto;
-import com.ssafy.enjoytrip.qna.model.QnaListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,7 @@ public class PlanServiceImpl implements PlanService{
     private final Random random;
 
     private String makeRandomColor(){
-        return "#"+Integer.toHexString(random.nextInt(Integer.parseInt("FFFFFF", 16)+1));
+        return "#"+String.format("%06X", random.nextInt(Integer.parseInt("FFFFFF", 16)+1));
     }
 
     @Override
@@ -31,11 +29,10 @@ public class PlanServiceImpl implements PlanService{
     public PlanMetaListDto listPlanMeta(Map<String, String> map) throws Exception {
         Map<String, Object> param = new HashMap<String, Object>();
         Long id = Long.parseLong(map.get("userId"));
-        int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : (String) map.get("pgno"));
-        int sizePerPage = Integer.parseInt(map.get("spp") == null ? "7" : (String) map.get("spp"));
+        int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
+        int sizePerPage = Integer.parseInt(map.get("spp") == null ? "7" : map.get("spp"));
         int start = currentPage * sizePerPage - sizePerPage;
-
-        String word = map.get("word") == null ? "" : (String) map.get("word");
+        String word = map.get("word") == null ? "" : map.get("word");
 
         param.put("start", start);
         param.put("listsize", sizePerPage);
@@ -47,7 +44,7 @@ public class PlanServiceImpl implements PlanService{
         int totalPageCount = (totalPlanCount - 1) / sizePerPage + 1;
         PlanMetaListDto planMetaListDto = new PlanMetaListDto();
         planMetaListDto.setPlans(list);
-        planMetaListDto.setCurrentPage(totalPlanCount);
+        planMetaListDto.setCurrentPage(currentPage);
         planMetaListDto.setTotalPageCount(totalPageCount);
 
         return planMetaListDto;
@@ -82,14 +79,11 @@ public class PlanServiceImpl implements PlanService{
     @Transactional(readOnly = true)
     public List<PlanContentDto> listPlanContent(Map<String, String> map) throws Exception {
         Map<String, Object> param = new HashMap<String, Object>();
-        if(map.get("planId") == null || map.get("date") == null){
-            throw new RuntimeException("Send planId and date");
+        if(map.get("planId") == null){
+            throw new RuntimeException("Send planId ");
         }
         long planId = Long.parseLong(map.get("planId"));
-        String date = map.get("date");
-
         param.put("planId", planId);
-        param.put("date", date);
 
         return pm.listPlanContent(param);
     }

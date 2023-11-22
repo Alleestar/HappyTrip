@@ -99,7 +99,8 @@ watch(
       props.attractions.forEach((attraction) => {
         let obj = {};
         obj.contentId = attraction.contentId;
-        (obj.contentTypeId = attraction.contentTypeId), (obj.img1 = attraction.img1);
+        obj.contentTypeId = attraction.contentTypeId, 
+        obj.img1 = attraction.img1;
         obj.cat1 = attraction.cat1;
         obj.cat2 = attraction.cat2;
         obj.cat3 = attraction.cat3;
@@ -199,7 +200,7 @@ const deleteMarkers = () => {
     markers.value.forEach((marker) => marker.setMap(null));
   }
   if (keys.value.length > 0) {
-    keys.value.forEach((key) => infoWindows.get(key).setMap(null));
+    keys.value.forEach((key) => infoWindows.value.get(key).setMap(null));
     keys.value = [];
   }
 };

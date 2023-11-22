@@ -1,37 +1,32 @@
 <script setup>
 import { ref, onMounted, defineProps } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Sortable from "sortablejs";
 import { ko } from "date-fns/locale";
-import { getPlanMeta, listPlanContent } from "@/api/plan.js";
+import { removePlanMeta ,removePlanContent, modifyPlanMeta, modifyPlanContent, getPlanMeta, listPlanContent } from "@/api/plan.js";
 import MyPlacePlanDetailItem from "@/components/MyPlace/item/MyPlacePlanDetailItem.vue";
+import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 
 const props = defineProps({ id: String });
 
-const dates = ref([]);
-const route = useRoute();
-const router = useRouter();
-
-const attractions = ref([]);
+const date = ref("");
+const category = ref("");
 const selectAttraction = ref({});
-const dateFormat = (dates) => {
+const dateFormat = (date) => {
   try {
-    const sd = dates[0].getDate();
-    const sm = dates[0].getMonth() + 1;
-    const sy = dates[0].getFullYear();
-
-    const ed = dates[1].getDate();
-    const em = dates[1].getMonth() + 1;
-    const ey = dates[1].getFullYear();
-    return `${sy}/${sm}/${sd} -  ${ey}/${em}/${ed}`;
+    const sd = date.getDate();
+    const sm = date.getMonth() + 1;
+    const sy = date.getFullYear();
+    return `${sy}/${sm}/${sd}`;
   } catch {}
 };
 
-function onShowModal() {
-  console.log("hi");
+function onShowModal(modalAttraction, modalCategory) {
+  selectAttraction.value = modalAttraction;
+  category.value = modalCategory;
 }
 
 const sortableTable = ref(null);
@@ -42,19 +37,23 @@ onMounted(() => {
     },
     onEnd: (event) => {
       event.item.classList.remove("selected");
+      const movedPlace = places.value.splice(event.oldIndex, 1)[0];
+      places.value.splice(event.newIndex, 0, movedPlace);
     },
   });
 });
+
+
 const title = ref("");
 const color = ref("");
-const date = ref("");
+const totalCost = ref(0);
 function searchPlan() {
   getPlanMeta(
     props.id,
     ({ data }) => {
-      date.value = data.startDate;
       title.value = data.title;
       color.value = data.color;
+      date.value = data.date;
       searchPlaces();
     },
     (error) => {
@@ -67,7 +66,6 @@ const places = ref([]);
 function searchPlaces() {
   const params = {
     planId: props.id,
-    date: date.value,
   };
 
   listPlanContent(
@@ -75,6 +73,7 @@ function searchPlaces() {
     ({ data }) => {
       console.log(data);
       places.value = data;
+      data.forEach((p)=>{totalCost.value += p.cost});
     },
     (error) => {
       console.log(error);
@@ -82,7 +81,87 @@ function searchPlaces() {
   );
 }
 
+function mod(prev, cost, memo, place){
+
+  if(!prev.value) prev.value = "0";
+  if(!cost.value) cost.value = "0";
+  if(prev.value!=cost.value){
+    totalCost.value -= parseInt(prev.value);
+    totalCost.value += parseInt(cost.value);
+  }
+   
+  place.value.cost = cost.value;
+  place.value.memo = memo.value;
+}
 searchPlan();
+const deleteList = ref([]);
+const showDate = ref("");
+
+function del(planContentId){
+  deleteList.value.push(planContentId);
+}
+function save(){
+  const params = {
+    planId: props.id,
+    title: title.value,
+    date: date.value
+  };
+
+  modifyPlanMeta(
+    params,
+    ({ data }) => {
+      alert("저장이 완료되었습니다.");
+    },
+    (error) => {
+      alert("오류가 발생했습니다.");
+      console.log(error);
+    }
+  );
+
+  places.value.forEach((place, i)=>{
+    const pc = {
+    planContentId: place.planContentId,
+    cost: place.cost,
+    memo: place.memo,
+    sortingMetaInfo: i
+    }
+
+    modifyPlanContent(pc,
+    ({ data }) => {
+    },
+    (error) => {
+      alert("오류가 발생했습니다.");
+      console.log(error);
+    }
+    )
+  })
+
+  deleteList.value.forEach((planId)=>{
+    removePlanContent(planId,
+    ({ data }) => {
+    },
+    (error) => {
+      alert("오류가 발생했습니다.");
+      console.log(error);
+    }
+    )
+  })
+
+}
+const router = useRouter();
+function delList(){
+  removePlanMeta(props.id,
+    ({ data }) => {
+      router.push({ name: "my-place" });
+    },
+    (error) => {
+      alert("오류가 발생했습니다.");
+      console.log(error);
+    }
+    )
+}
+
+
 </script>
 
 <template>
@@ -90,56 +169,55 @@ searchPlan();
     <div class="col-10 mt-4">
       <div class="container p-4 border" style="display: flex">
         <div class="card my-card me-3" :style="{ backgroundColor: color }"></div>
-        <h5 id="mp-container-title">{{ title }}</h5>
+        <input type="text" id="mp-container-title" v-model="title"/>
       </div>
     </div>
     <div class="col-10 mt-4">
-      <div class="container p-0" style="display: flex; justify-content: space-between; flex: 1">
-        <button class="btn day-btn">◀</button>
-        <div style="display: flex; flex-direction: column">
+      <div class="container p-0" style="display: flex; justify-content: center; flex: 1">
+        <div style="display: flex;">
           <VueDatePicker
             style="width: 325px"
-            v-model="dates"
-            range
+            v-model="date"
             :enable-time-picker="false"
             :format-locale="ko"
             :format="dateFormat"
-            placeholder="시작일, 종료일을 선택해주세요."
+            placeholder="날짜를 선택해주세요."
           ></VueDatePicker>
-
-          <h5
-            class="heavy mt-3 mb-0"
-            style="display: flex; align-items: center; justify-content: center"
-          >
-            2023.11.21
-          </h5>
+          <button class="btn btn-outline-dark mx-1" id="save-btn" @click="save">SAVE</button>
+          <button class="btn btn-outline-dark" @click="delList"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+</svg></button>
         </div>
-
-        <button class="btn day-btn">▶</button>
       </div>
     </div>
     <div class="col-10 my-4">
       <div class="container" style="display: flex; flex: 1">
         <div class="mx-1" id="map-area" style="flex: 5; height: 500px">
           <VKakaoMap
-            :attractions="attractions"
+            :attractions="places"
             :selectAttraction="selectAttraction"
             @show-modal="onShowModal"
           />
+          <PlaceDetail :attraction="selectAttraction" :category="category" />
         </div>
         <div style="flex: 5">
+          <div class="mb-2" v-if="showDate">
+            <h5
+            class="heavy mb-0"
+            style="display: flex; align-items: center; justify-content: center">
+            {{ showDate }}
+          </h5>
+        </div>
           <div class="mx-1" id="plan-area" style="overflow: auto; max-height: 470px">
             <table class="table table-hover text-center light">
               <colgroup>
-                <col width="5%" />
-                <col width="30%" />
+                <col width="40%" />
                 <col width="20%" />
                 <col width="40%" />
                 <col width="5%" />
               </colgroup>
               <thead class="table-dark">
                 <tr>
-                  <th></th>
                   <th>장소</th>
                   <th>비용</th>
                   <th>메모</th>
@@ -151,23 +229,20 @@ searchPlan();
                   v-for="place in places"
                   :key="place.planContentId"
                   :place="place"
+                  @mod="mod"
+                  @del="del"
                   v-if="places.length > 0"
                 />
                 <tr v-else>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
+                  <td colspan="5">장소를 등록해주세요</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="mt-2 px-2" style="display: flex; justify-content: space-between">
-            <button class="btn btn-dark mx-1" id="save-btn">SAVE</button>
-            <div style="display: flex; align-items: center">
+          <div class="mt-2 px-2" style="display: flex; justify-content: end">
+            <div style="display: flex; align-items: center" v-if="places.length > 0">
               <span class="heavy">total:&nbsp;&nbsp;&nbsp;</span>
-              <span class="medium">50000</span>
+              <span class="medium">{{ totalCost }}</span>
               <span class="heavy"> <b>&nbsp;₩</b></span>
             </div>
           </div>
@@ -193,6 +268,7 @@ searchPlan();
   src: url("/fonts/EASTARJET-DemiLight.ttf");
 }
 
+#delete-btn,
 #save-btn {
   font-family: "EASTARJET-Heavy";
   font-size: 12px;
@@ -288,10 +364,14 @@ td {
 
 #mp-container-title {
   font-family: "EASTARJET-Heavy";
+  font-size: 16px;
+  border: none;
+  width: 100%;
 }
 #mp-container-content {
   font-family: "EASTARJET-Medium";
   font-size: 12px;
   text-decoration: underline;
+
 }
 </style>

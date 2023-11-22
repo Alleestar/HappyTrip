@@ -28,5 +28,4 @@ public interface PlanMapper {
     void createPlanContent(PlanContentDto param) throws SQLException;
     void modifyPlanContent(PlanContentDto param) throws SQLException;
     void deletePlanContentById(Long planContentId) throws SQLException;
-
 }

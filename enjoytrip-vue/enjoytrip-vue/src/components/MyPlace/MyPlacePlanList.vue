@@ -3,9 +3,7 @@ import { ref } from "vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 import { useRouter } from "vue-router";
 import MyPlacePlanListItem from "@/components/MyPlace/item/MyPlacePlanListItem.vue";
-import { listPlanMeta } from "@/api/plan.js";
-
-const plans = ref([]);
+import { listPlanMeta , createPlanMeta } from "@/api/plan.js";
 
 // 화면 이동
 const router = useRouter();
@@ -20,49 +18,51 @@ const word = ref("");
 
 const searchedPlanRow1 = ref([]);
 const searchedPlanRow2 = ref([]);
-function searchPlan() {
-  const params = {
-    pgno: 1,
-    spp: import.meta.env.VITE_SAVED_TRIP_LIST_SIZE,
-    userId: 1,
-    word: word.value,
-  };
+
+const params = {
+  pgno: 1,
+  spp: import.meta.env.VITE_SAVED_TRIP_LIST_SIZE,
+  userId: 1,
+  word: word.value,
+};
+
+function searchPlan() {  
   params.word = word.value;
-  console.log(params);
   listPlanMeta(
     params,
     ({ data }) => {
       searchedPlanRow1.value = data.plans.slice(0, 4);
       searchedPlanRow2.value = data.plans.slice(4);
+      
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
+      params.pgno = totalPage.value;
     },
     (error) => {
       console.log(error);
+      params.pgno = 1;
     }
   );
-}
-
-function refresh() {
-  word.value = "";
-  params.word = "";
-  params.pgno = 1;
-  // listQna(
-  //   params,
-  //   ({ data }) => {
-  //     questions.value = data.qnas;
-  //     currentPage.value = data.currentPage;
-  //     totalPage.value = data.totalPageCount;
-  //   },
-  //   (error) => {
-  //     console.log(error);
-  //   }
-  // );
 }
 
 function onPageChange(value) {
   params.pgno = value;
   searchPlan();
+}
+
+function makeNewPlanList() {
+  const planMeta = {
+    userId: 1,
+  };
+  createPlanMeta(
+    planMeta,
+    ({ data }) => {
+      searchPlan();
+    },
+    (error) => {
+      console.log("error");
+    }
+  );
 }
 
 searchPlan();
@@ -103,36 +103,37 @@ searchPlan();
         <tr class="my-4">
           <MyPlacePlanListItem v-for="plan in searchedPlanRow1" :key="plan.planId" :plan="plan">
           </MyPlacePlanListItem>
+          <td v-if="searchedPlanRow1.length < 4">
+            <button 
+              class="card"
+              style="display:flex; justify-content:center; align-items:center; width: 200px; height: 200px; background-color: white; text-decoration: none"
+              @click="makeNewPlanList"
+            >
+              <div class="card-body p-0 d-flex justify-content-center align-items-center">
+                <h4 class="card-title m-0 medium" style="font-size: 60px">+</h4>
+              </div>
+            </button>
+          </td>
           <td
             v-for="num in 3 - searchedPlanRow1.length"
             :key="num"
             v-if="searchedPlanRow1.length < 4"
           ></td>
-          <td v-if="searchedPlanRow1.length < 4">
-            <router-link
-              class="card"
-              style="width: 200px; height: 200px; background-color: white; text-decoration: none"
-              :to="{ name: 'my-plan', params: { id: 0 } }"
-            >
-              <div class="card-body p-0 d-flex justify-content-center align-items-center">
-                <h4 class="card-title m-0 medium" style="font-size: 60px">+</h4>
-              </div>
-            </router-link>
-          </td>
         </tr>
         <tr class="my-4" v-if="searchedPlanRow1.length == 4 || searchedPlanRow2.length > 0">
           <MyPlacePlanListItem v-for="plan in searchedPlanRow2" :key="plan.planId" :plan="plan">
           </MyPlacePlanListItem>
           <td>
-            <router-link
+            
+            <button 
               class="card"
-              style="width: 200px; height: 200px; background-color: white; text-decoration: none"
-              :to="{ name: 'my-plan', params: { id: 0 } }"
+              style="display:flex; justify-content:center; align-items:center; width: 200px; height: 200px; background-color: white; text-decoration: none"
+              @click="makeNewPlanList"
             >
               <div class="card-body p-0 d-flex justify-content-center align-items-center">
                 <h4 class="card-title m-0 medium" style="font-size: 60px">+</h4>
               </div>
-            </router-link>
+            </button>
           </td>
           <td
             v-for="num in 3 - searchedPlanRow2.length"
@@ -149,7 +150,7 @@ searchPlan();
         ></QnAListItem> -->
       <PageNavigation
         :currentPage="currentPage"
-        :total-page="totalPage"
+        :totalPage="totalPage"
         @page-change="onPageChange"
       ></PageNavigation>
     </div>
