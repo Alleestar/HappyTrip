@@ -1,15 +1,10 @@
 <script setup>
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import QnACommentListItem from "@/components/QnA/item/QnACommentListItem.vue";
 import { detailQna, removeQna } from "@/api/qna.js";
-import {
-  listComment,
-  detailComment,
-  modifyComment,
-  savaComment,
-  deleteComment,
-} from "@/api/qnaComment.js";
+import { listComment, savaComment } from "@/api/qnaComment.js";
+
 const route = useRoute();
 const router = useRouter();
 function goToList() {
@@ -18,21 +13,6 @@ function goToList() {
 const qid = ref(route.query.qid);
 const question = ref({});
 const searchComment = ref([]);
-
-function showCommentList() {
-  listComment(
-    qid.value,
-    ({ data }) => {
-      searchComment.value = data;
-      console.log(data);
-      console.log("댓글 불러오기 성공");
-    },
-    (error) => {
-      console.log("댓글 불러오기 에러 발생");
-    }
-  );
-}
-showCommentList();
 
 function goToDelete() {
   removeQna(
@@ -66,6 +46,21 @@ detailQna(
     console.log(error);
   }
 );
+
+function showCommentList() {
+  listComment(
+    qid.value,
+    ({ data }) => {
+      searchComment.value = data;
+      console.log(data);
+      console.log("댓글 불러오기 성공");
+    },
+    (error) => {
+      console.log("댓글 불러오기 에러 발생");
+    }
+  );
+}
+showCommentList();
 
 const commentContent = ref("");
 const commentDiv = ref(null);
@@ -101,12 +96,6 @@ function goToWriteComment() {
     commentContent.value = "";
   }
 }
-
-//   <!-- qid: questions.value.length,
-//  cid:
-//  content: content.value,
-//  userNickname: "테스트닉네임",
-//  date: "2023.11.13 12:12", -->
 </script>
 
 <template>
@@ -228,15 +217,15 @@ function goToWriteComment() {
 }
 
 .comment-font {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .meta-info {
-  font-size: 8px;
+  font-size: 15px;
 }
 
 .comment-nickname {
-  font-size: 10px;
+  font-size: 15x;
 }
 
 .container-comment {
@@ -245,7 +234,7 @@ function goToWriteComment() {
 }
 
 .content-font {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #comment-img {
@@ -255,7 +244,7 @@ function goToWriteComment() {
 
 #comment-input {
   font-family: "EASTARJET-DemiLight";
-  font-size: 12px;
+  font-size: 15px;
   border: none;
   border-radius: 0;
   background-color: #f0f0f0;

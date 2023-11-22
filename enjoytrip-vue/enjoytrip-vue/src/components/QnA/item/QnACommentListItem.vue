@@ -1,5 +1,28 @@
 <script setup>
-defineProps({ comment: Object });
+import { useRouter } from "vue-router";
+const currComment = defineProps({ comment: Object });
+import { deleteComment } from "@/api/qnaComment.js";
+
+const router = useRouter();
+
+const goToModify = () => {
+  router.push({
+    name: "qna-comment-modify",
+    state: currComment.comment,
+  });
+};
+
+function goToDeleteComment() {
+  deleteComment(
+    currComment.comment.id,
+    ({ data }) => {
+      console.log("댓글 삭제 성공");
+    },
+    (error) => {
+      console.log("댓글 삭제 에러 발생");
+    }
+  );
+}
 </script>
 
 <!-- qid: questions.value.length,
@@ -11,7 +34,7 @@ defineProps({ comment: Object });
   <div class="container p-3 border border-top-0">
     <div class="meta-usr-info d-flex">
       <div class="d-flex align-items-start">
-        <img src="@/assets/user.png" style="width: 10px" />
+        <img src="@/assets/user.png" style="width: 14px" />
       </div>
       <div class="ms-1 d-flex align-items-center">
         <h6 class="medium m-0 comment-nickname">{{ comment.writer }}</h6>
@@ -24,6 +47,11 @@ defineProps({ comment: Object });
     </div>
     <div class="meta-article-info">
       <p class="light meta-info text-secondary mb-0">{{ comment.createdDate }}</p>
+    </div>
+    <div class="container d-flex justify-content-end">
+      <!-- <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModifyComment">수정</button> -->
+      <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModify">수정</button>
+      <button class="btn btn-dark mx-1" id="delete-btn" @click="goToDeleteComment">삭제</button>
     </div>
   </div>
 </template>
@@ -57,7 +85,7 @@ defineProps({ comment: Object });
 }
 
 .comment-nickname {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .container-comment {
@@ -66,7 +94,7 @@ defineProps({ comment: Object });
 }
 
 .content-font {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #comment-img {
@@ -74,11 +102,17 @@ defineProps({ comment: Object });
   width: 12px;
 }
 
+#modify-btn,
+#delete-btn {
+  font-family: "EASTARJET-Heavy";
+  font-size: 12px;
+}
+
 .comment-font {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .meta-info {
-  font-size: 8px;
+  font-size: 15px;
 }
 </style>
