@@ -5,7 +5,7 @@ import { createPlanContent } from "@/api/plan.js";
 function savePlanContent() {
   const pc = {
     planId: props.plan.planId,
-    attractionContentId: props.attraction.contentId,
+    contentId: props.attraction.contentId,
     date: props.plan.startDate,
   };
   createPlanContent(

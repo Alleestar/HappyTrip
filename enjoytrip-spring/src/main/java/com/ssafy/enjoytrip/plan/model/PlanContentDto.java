@@ -11,8 +11,8 @@ public class PlanContentDto {
     private String memo;
     private String date;
     private int sortingMetaInfo;
-    int attractionContentId;
-    int attractionContentTypeId;
+    int contentId;
+    int contentTypeId;
     String cat1;
     String cat2;
     String cat3;

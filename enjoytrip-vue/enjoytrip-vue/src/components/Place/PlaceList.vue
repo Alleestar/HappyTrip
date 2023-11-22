@@ -2,7 +2,6 @@
 import { ref, watch } from "vue";
 import PlacePageNavigation from "@/components/Place/PlacePageNavigation.vue";
 import PlaceListItem from "@/components/Place/item/PlaceListItem.vue";
-import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 import { listAttraction, getAddr } from "@/api/attraction.js";
 
 const init = ref(true);

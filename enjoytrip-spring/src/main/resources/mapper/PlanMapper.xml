@@ -7,9 +7,8 @@
     <resultMap type="PlanMetaDto" id="planMeta">
         <result column="plan_id" property="planId"/>
         <result column="user_id" property="userId"/>
+        <result column="date" property="date"/>
         <result column="title" property="title"/>
-        <result column="start_date" property="startDate"/>
-        <result column="end_date" property="endDate"/>
         <result column="color" property="color"/>
     </resultMap>
 
@@ -20,8 +19,8 @@
         <result column="memo" property="memo"/>
         <result column="date" property="date"/>
         <result column="sorting_meta_info" property="sortingMetaInfo"/>
-        <result column="content_id" property="attractionContentId"/>
-        <result column="content_type_id" property="attractionContentTypeId"/>
+        <result column="content_id" property="contentId"/>
+        <result column="content_type_id" property="contentTypeId"/>
         <result column="cat1" property="cat1"/>
         <result column="cat2" property="cat2"/>
         <result column="cat3" property="cat3"/>
@@ -39,9 +38,6 @@
             user_id = #{id}
             <if test="word">
                 and title like concat('%', #{word}, '%')
-            </if>
-            <if test="userId">
-                and user_id = #{userId}
             </if>
         </where>
         limit #{start}, #{listsize}
@@ -61,19 +57,16 @@
             <if test="word">
                 and title like concat('%', #{word}, '%')
             </if>
-            <if test="userId">
-                and user_id = #{userId}
-            </if>
         </where>
     </select>
 
     <insert id="createPlanMeta" parameterType="PlanMetaDto">
-        insert into plan_meta (user_id, title, start_date, end_date, color)
-        values (#{userId}, date_format(now(), '%Y/%m/%d'), date_format(now(), '%Y/%m/%d'), date_format(now(), '%Y/%m/%d'), #{color})
+        insert into plan_meta (user_id, title, date, color)
+        values (#{userId}, date_format(now(), '%Y/%m/%d'),date_format(now(), '%Y/%m/%d'), #{color})
     </insert>
 
     <update id="modifyPlanMeta" parameterType="PlanMetaDto">
-        update plan_meta set title = #{title}, start_date = #{startDate}, end_date = #{endDate}
+        update plan_meta set title = #{title}, date=#{date}
         where plan_id = #{planId}
     </update>
 
@@ -82,23 +75,30 @@
         where plan_id = #{planId}
     </delete>
 
+
+    <!--  p.plan_content_id as plan_content_id, p.plan_id as plan_id, p.cost as cost, p.memo as memo,
+        p.sorting_meta_info as sorting_meta_info, a.content_id as content_id, a.content_type_id as content_type_id,
+        a.title as title, a.addr1 as addr1, a.latitude as latitude, a.longitude as longitude -->
     <!-- PlanContent: 여행계획 세부정보-->
     <select id="listPlanContent" parameterType="map" resultMap="planContent">
-        select p.plan_content_id as plan_content_id, p.plan_id as plan_id, p.cost as cost, p.memo as memo, p.date as date,
-        p.sorting_meta_info as sorting_meta_info, a.content_id as content_id, a.content_type_id as content_type_id,
-        a.title as title, a.addr1 as addr1, a.latitude as latitude, a.longitude as longitude
-        from plan_content p join attraction_info a
-        on p.attraction_id = a.content_id
-        where p.plan_id = #{planId} and p.date = #{date}
+        select *
+        from (select *
+              from plan_content
+              where plan_id = #{planId}) p
+            join attraction_info
+            on attraction_id = content_id
+            join attraction_detail
+            using (content_id)
+        order by sorting_meta_info
     </select>
 
     <insert id="createPlanContent" parameterType="PlanContentDto">
-        insert into plan_content (plan_id, attraction_id, cost, memo, date, sorting_meta_info)
-        values (#{planId}, #{attractionContentId}, #{cost}, #{memo}, #{date}, #{sortingMetaInfo})
+        insert into plan_content (plan_id, attraction_id, cost, memo, sorting_meta_info)
+        values (#{planId}, #{contentId}, #{cost}, #{memo}, #{sortingMetaInfo})
     </insert>
 
     <update id="modifyPlanContent" parameterType="PlanContentDto">
-        update plan_content set cost = #{cost}, date = #{date}, memo = #{memo}, sorting_meta_info = #{sortingMetaInfo}
+        update plan_content set cost = #{cost}, memo = #{memo}, sorting_meta_info = #{sortingMetaInfo}
         where plan_content_id = #{planContentId}
     </update>
 
