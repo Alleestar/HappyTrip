@@ -10,6 +10,7 @@ function goToModifyComment() {
     writer: "닉네임뭐하지",
   };
   modifyComment(
+    console.log(c),
     currComment.comment.postId,
     c,
     ({ data }) => {

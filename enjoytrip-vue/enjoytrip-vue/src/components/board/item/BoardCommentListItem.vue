@@ -4,7 +4,7 @@ import { modifyComment, deleteComment } from "@/api/boardComment.js";
 
 function goToModifyComment() {
   const c = {
-    boarId: currComment.comment.postId,
+    boardId: currComment.comment.postId,
     id: currComment.comment.id,
     content: "권송아",
     writer: "닉네임뭐하지",
@@ -12,12 +12,13 @@ function goToModifyComment() {
   modifyComment(
     currComment.comment.postId,
     c,
+    console.log(c),
     ({ data }) => {
       console.log("댓글 수정 성공");
       //showCommentList();
     },
     (error) => {
-      console.log("댓글 등록 실패");
+      console.log("댓글 수정 실패");
     }
   );
 }
