@@ -1,11 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Sortable from "sortablejs";
 import { ko } from "date-fns/locale";
+import { getPlanMeta, listPlanContent } from "@/api/plan.js";
+import MyPlacePlanDetailItem from "@/components/MyPlace/item/MyPlacePlanDetailItem.vue";
+
+const props = defineProps({ id: String });
 
 const dates = ref([]);
 const route = useRoute();
@@ -41,14 +45,52 @@ onMounted(() => {
     },
   });
 });
+const title = ref("");
+const color = ref("");
+const date = ref("");
+function searchPlan() {
+  getPlanMeta(
+    props.id,
+    ({ data }) => {
+      date.value = data.startDate;
+      title.value = data.title;
+      color.value = data.color;
+      searchPlaces();
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+}
+
+const places = ref([]);
+function searchPlaces() {
+  const params = {
+    planId: props.id,
+    date: date.value,
+  };
+
+  listPlanContent(
+    params,
+    ({ data }) => {
+      console.log(data);
+      places.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+}
+
+searchPlan();
 </script>
 
 <template>
   <div class="row container-fluid m-1 d-flex align-content-start justify-content-center">
     <div class="col-10 mt-4">
       <div class="container p-4 border" style="display: flex">
-        <div class="card me-3" style="background-color: blue; border: none; width: 32px"></div>
-        <h5 id="mp-container-title">[[My Place: 여행계획 1]]</h5>
+        <div class="card my-card me-3" :style="{ backgroundColor: color }"></div>
+        <h5 id="mp-container-title">{{ title }}</h5>
       </div>
     </div>
     <div class="col-10 mt-4">
@@ -77,20 +119,16 @@ onMounted(() => {
       </div>
     </div>
     <div class="col-10 my-4">
-      <div class="container" style="display: flex">
-        <div class="mx-1" id="map-area" style="flex: 5; width: 500px; height: 500px">
+      <div class="container" style="display: flex; flex: 1">
+        <div class="mx-1" id="map-area" style="flex: 5; height: 500px">
           <VKakaoMap
             :attractions="attractions"
             :selectAttraction="selectAttraction"
             @show-modal="onShowModal"
           />
         </div>
-        <div>
-          <div
-            class="mx-1"
-            id="plan-area"
-            style="flex: 5; overflow: auto; max-width: 500px; max-height: 470px"
-          >
+        <div style="flex: 5">
+          <div class="mx-1" id="plan-area" style="overflow: auto; max-height: 470px">
             <table class="table table-hover text-center light">
               <colgroup>
                 <col width="5%" />
@@ -109,68 +147,18 @@ onMounted(() => {
                 </tr>
               </thead>
               <tbody ref="sortableTable">
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명2</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명3</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명4</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
-                </tr>
-                <tr>
-                  <td><button class="btn loc-day-btn">◀</button></td>
-                  <td>장소명1</td>
-                  <td><input class="table-input-text light" type="text" placeholder="비용" /></td>
-                  <td><input class="table-input-text light" type="text" placeholder="메모" /></td>
-                  <td><button class="btn loc-day-btn">▶</button></td>
+                <MyPlacePlanDetailItem
+                  v-for="place in places"
+                  :key="place.planContentId"
+                  :place="place"
+                  v-if="places.length > 0"
+                />
+                <tr v-else>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
                 </tr>
               </tbody>
             </table>
@@ -208,6 +196,10 @@ onMounted(() => {
 #save-btn {
   font-family: "EASTARJET-Heavy";
   font-size: 12px;
+}
+.my-card {
+  border: none;
+  width: 32px;
 }
 
 .loc-day-btn {
