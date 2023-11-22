@@ -1,27 +1,16 @@
 <script setup>
+import { useRouter } from "vue-router";
 const currComment = defineProps({ comment: Object });
-import { modifyComment, deleteComment } from "@/api/qnaComment.js";
+import { deleteComment } from "@/api/qnaComment.js";
 
-function goToModifyComment() {
-  const c = {
-    postId: currComment.comment.postId,
-    id: currComment.comment.id,
-    content: "권송아",
-    writer: "닉네임뭐하지",
-  };
-  modifyComment(
-    console.log(c),
-    currComment.comment.postId,
-    c,
-    ({ data }) => {
-      console.log("댓글 수정 성공");
-      //showCommentList();
-    },
-    (error) => {
-      console.log("댓글 등록 실패");
-    }
-  );
-}
+const router = useRouter();
+
+const goToModify = () => {
+  router.push({
+    name: "qna-comment-modify",
+    state: currComment.comment,
+  });
+};
 
 function goToDeleteComment() {
   deleteComment(
@@ -45,7 +34,7 @@ function goToDeleteComment() {
   <div class="container p-3 border border-top-0">
     <div class="meta-usr-info d-flex">
       <div class="d-flex align-items-start">
-        <img src="@/assets/user.png" style="width: 10px" />
+        <img src="@/assets/user.png" style="width: 14px" />
       </div>
       <div class="ms-1 d-flex align-items-center">
         <h6 class="medium m-0 comment-nickname">{{ comment.writer }}</h6>
@@ -60,7 +49,8 @@ function goToDeleteComment() {
       <p class="light meta-info text-secondary mb-0">{{ comment.createdDate }}</p>
     </div>
     <div class="container d-flex justify-content-end">
-      <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModifyComment">수정</button>
+      <!-- <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModifyComment">수정</button> -->
+      <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModify">수정</button>
       <button class="btn btn-dark mx-1" id="delete-btn" @click="goToDeleteComment">삭제</button>
     </div>
   </div>
@@ -95,7 +85,7 @@ function goToDeleteComment() {
 }
 
 .comment-nickname {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .container-comment {
@@ -104,7 +94,7 @@ function goToDeleteComment() {
 }
 
 .content-font {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #comment-img {
@@ -112,11 +102,17 @@ function goToDeleteComment() {
   width: 12px;
 }
 
+#modify-btn,
+#delete-btn {
+  font-family: "EASTARJET-Heavy";
+  font-size: 12px;
+}
+
 .comment-font {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .meta-info {
-  font-size: 8px;
+  font-size: 15px;
 }
 </style>

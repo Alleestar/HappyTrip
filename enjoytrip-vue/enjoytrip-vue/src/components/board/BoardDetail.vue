@@ -217,15 +217,15 @@ function goToWriteComment() {
 }
 
 .comment-font {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .meta-info {
-  font-size: 8px;
+  font-size: 15px;
 }
 
 .comment-nickname {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .container-comment {
@@ -234,7 +234,7 @@ function goToWriteComment() {
 }
 
 .content-font {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #comment-img {
@@ -244,7 +244,7 @@ function goToWriteComment() {
 
 #comment-input {
   font-family: "EASTARJET-DemiLight";
-  font-size: 12px;
+  font-size: 15px;
   border: none;
   border-radius: 0;
   background-color: #f0f0f0;

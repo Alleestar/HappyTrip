@@ -61,7 +61,7 @@ defineProps({ board: Object });
 
 .meta-info {
   font-family: "EASTARJET-DemiLight";
-  font-size: 8px;
+  font-size: 15px;
 }
 
 .article {
@@ -70,11 +70,11 @@ defineProps({ board: Object });
 }
 
 .article-content {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .article-title {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .article-img-shape {

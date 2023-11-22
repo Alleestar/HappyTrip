@@ -1,27 +1,16 @@
 <script setup>
+import { useRouter } from "vue-router";
 const currComment = defineProps({ comment: Object });
-import { modifyComment, deleteComment } from "@/api/boardComment.js";
+import { deleteComment } from "@/api/boardComment.js";
 
-function goToModifyComment() {
-  const c = {
-    boardId: currComment.comment.postId,
-    id: currComment.comment.id,
-    content: "권송아",
-    writer: "닉네임뭐하지",
-  };
-  modifyComment(
-    currComment.comment.postId,
-    c,
-    console.log(c),
-    ({ data }) => {
-      console.log("댓글 수정 성공");
-      //showCommentList();
-    },
-    (error) => {
-      console.log("댓글 수정 실패");
-    }
-  );
-}
+const router = useRouter();
+
+const goToModify = () => {
+  router.push({
+    name: "board-comment-modify",
+    state: currComment.comment,
+  });
+};
 
 function goToDeleteComment() {
   deleteComment(
@@ -60,7 +49,7 @@ function goToDeleteComment() {
       <p class="light meta-info text-secondary mb-0">{{ comment.createdDate }}</p>
     </div>
     <div class="container d-flex justify-content-end">
-      <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModifyComment">수정</button>
+      <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModify">수정</button>
       <button class="btn btn-dark mx-1" id="delete-btn" @click="goToDeleteComment">삭제</button>
     </div>
   </div>
@@ -95,7 +84,7 @@ function goToDeleteComment() {
 }
 
 .comment-nickname {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .container-comment {
@@ -104,7 +93,7 @@ function goToDeleteComment() {
 }
 
 .content-font {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #comment-img {
@@ -113,10 +102,10 @@ function goToDeleteComment() {
 }
 
 .comment-font {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .meta-info {
-  font-size: 8px;
+  font-size: 15px;
 }
 </style>
