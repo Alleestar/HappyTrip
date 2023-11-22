@@ -11,7 +11,6 @@ function detailComment(id, success, fail) {
 }
 
 function modifyComment(id, params, success, fail) {
-  console.log(id);
   local.patch(`board_comment/update/${id}`, JSON.stringify(params)).then(success).catch(fail);
 }
 
