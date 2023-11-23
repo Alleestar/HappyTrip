@@ -21,6 +21,9 @@ function onShowMap(val) {
   attractions.value = val;
 }
 
+const as = ref([]);
+const s = ref({});
+
 const attraction = ref({});
 const category = ref("");
 function onShowModal(modalAttraction, modalCategory) {

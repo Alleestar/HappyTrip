@@ -3,7 +3,7 @@ import { ref } from "vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 import { useRouter } from "vue-router";
 import MyPlacePlanListItem from "@/components/MyPlace/item/MyPlacePlanListItem.vue";
-import { listPlanMeta , createPlanMeta } from "@/api/plan.js";
+import { listPlanMeta, createPlanMeta } from "@/api/plan.js";
 
 // 화면 이동
 const router = useRouter();
@@ -26,14 +26,14 @@ const params = {
   word: word.value,
 };
 
-function searchPlan() {  
+function searchPlan() {
   params.word = word.value;
   listPlanMeta(
     params,
     ({ data }) => {
       searchedPlanRow1.value = data.plans.slice(0, 4);
       searchedPlanRow2.value = data.plans.slice(4);
-      
+
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
       params.pgno = totalPage.value;
@@ -104,9 +104,17 @@ searchPlan();
           <MyPlacePlanListItem v-for="plan in searchedPlanRow1" :key="plan.planId" :plan="plan">
           </MyPlacePlanListItem>
           <td v-if="searchedPlanRow1.length < 4">
-            <button 
+            <button
               class="card"
-              style="display:flex; justify-content:center; align-items:center; width: 200px; height: 200px; background-color: white; text-decoration: none"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200px;
+                height: 200px;
+                background-color: white;
+                text-decoration: none;
+              "
               @click="makeNewPlanList"
             >
               <div class="card-body p-0 d-flex justify-content-center align-items-center">
@@ -124,10 +132,17 @@ searchPlan();
           <MyPlacePlanListItem v-for="plan in searchedPlanRow2" :key="plan.planId" :plan="plan">
           </MyPlacePlanListItem>
           <td>
-            
-            <button 
+            <button
               class="card"
-              style="display:flex; justify-content:center; align-items:center; width: 200px; height: 200px; background-color: white; text-decoration: none"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200px;
+                height: 200px;
+                background-color: white;
+                text-decoration: none;
+              "
               @click="makeNewPlanList"
             >
               <div class="card-body p-0 d-flex justify-content-center align-items-center">

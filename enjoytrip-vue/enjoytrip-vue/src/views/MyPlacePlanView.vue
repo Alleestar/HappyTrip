@@ -6,7 +6,14 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Sortable from "sortablejs";
 import { ko } from "date-fns/locale";
-import { removePlanMeta ,removePlanContent, modifyPlanMeta, modifyPlanContent, getPlanMeta, listPlanContent } from "@/api/plan.js";
+import {
+  removePlanMeta,
+  removePlanContent,
+  modifyPlanMeta,
+  modifyPlanContent,
+  getPlanMeta,
+  listPlanContent,
+} from "@/api/plan.js";
 import MyPlacePlanDetailItem from "@/components/MyPlace/item/MyPlacePlanDetailItem.vue";
 import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 
@@ -43,7 +50,6 @@ onMounted(() => {
   });
 });
 
-
 const title = ref("");
 const color = ref("");
 const totalCost = ref(0);
@@ -73,7 +79,9 @@ function searchPlaces() {
     ({ data }) => {
       console.log(data);
       places.value = data;
-      data.forEach((p)=>{totalCost.value += p.cost});
+      data.forEach((p) => {
+        totalCost.value += p.cost;
+      });
     },
     (error) => {
       console.log(error);
@@ -81,15 +89,14 @@ function searchPlaces() {
   );
 }
 
-function mod(prev, cost, memo, place){
-
-  if(!prev.value) prev.value = "0";
-  if(!cost.value) cost.value = "0";
-  if(prev.value!=cost.value){
+function mod(prev, cost, memo, place) {
+  if (!prev.value) prev.value = "0";
+  if (!cost.value) cost.value = "0";
+  if (prev.value != cost.value) {
     totalCost.value -= parseInt(prev.value);
     totalCost.value += parseInt(cost.value);
   }
-   
+
   place.value.cost = cost.value;
   place.value.memo = memo.value;
 }
@@ -97,14 +104,14 @@ searchPlan();
 const deleteList = ref([]);
 const showDate = ref("");
 
-function del(planContentId){
+function del(planContentId) {
   deleteList.value.push(planContentId);
 }
-function save(){
+function save() {
   const params = {
     planId: props.id,
     title: title.value,
-    date: date.value
+    date: date.value,
   };
 
   modifyPlanMeta(
@@ -118,39 +125,39 @@ function save(){
     }
   );
 
-  places.value.forEach((place, i)=>{
+  places.value.forEach((place, i) => {
     const pc = {
-    planContentId: place.planContentId,
-    cost: place.cost,
-    memo: place.memo,
-    sortingMetaInfo: i
-    }
+      planContentId: place.planContentId,
+      cost: place.cost,
+      memo: place.memo,
+      sortingMetaInfo: i,
+    };
 
-    modifyPlanContent(pc,
-    ({ data }) => {
-    },
-    (error) => {
-      alert("오류가 발생했습니다.");
-      console.log(error);
-    }
-    )
-  })
+    modifyPlanContent(
+      pc,
+      ({ data }) => {},
+      (error) => {
+        alert("오류가 발생했습니다.");
+        console.log(error);
+      }
+    );
+  });
 
-  deleteList.value.forEach((planId)=>{
-    removePlanContent(planId,
-    ({ data }) => {
-    },
-    (error) => {
-      alert("오류가 발생했습니다.");
-      console.log(error);
-    }
-    )
-  })
-
+  deleteList.value.forEach((planId) => {
+    removePlanContent(
+      planId,
+      ({ data }) => {},
+      (error) => {
+        alert("오류가 발생했습니다.");
+        console.log(error);
+      }
+    );
+  });
 }
 const router = useRouter();
-function delList(){
-  removePlanMeta(props.id,
+function delList() {
+  removePlanMeta(
+    props.id,
     ({ data }) => {
       router.push({ name: "my-place" });
     },
@@ -158,10 +165,8 @@ function delList(){
       alert("오류가 발생했습니다.");
       console.log(error);
     }
-    )
+  );
 }
-
-
 </script>
 
 <template>
@@ -169,12 +174,12 @@ function delList(){
     <div class="col-10 mt-4">
       <div class="container p-4 border" style="display: flex">
         <div class="card my-card me-3" :style="{ backgroundColor: color }"></div>
-        <input type="text" id="mp-container-title" v-model="title"/>
+        <input type="text" id="mp-container-title" v-model="title" />
       </div>
     </div>
     <div class="col-10 mt-4">
       <div class="container p-0" style="display: flex; justify-content: center; flex: 1">
-        <div style="display: flex;">
+        <div style="display: flex">
           <VueDatePicker
             style="width: 325px"
             v-model="date"
@@ -184,9 +189,20 @@ function delList(){
             placeholder="날짜를 선택해주세요."
           ></VueDatePicker>
           <button class="btn btn-outline-dark mx-1" id="save-btn" @click="save">SAVE</button>
-          <button class="btn btn-outline-dark" @click="delList"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-</svg></button>
+          <button class="btn btn-outline-dark" @click="delList">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="21"
+              height="20"
+              fill="currentColor"
+              class="bi bi-trash-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -203,11 +219,12 @@ function delList(){
         <div style="flex: 5">
           <div class="mb-2" v-if="showDate">
             <h5
-            class="heavy mb-0"
-            style="display: flex; align-items: center; justify-content: center">
-            {{ showDate }}
-          </h5>
-        </div>
+              class="heavy mb-0"
+              style="display: flex; align-items: center; justify-content: center"
+            >
+              {{ showDate }}
+            </h5>
+          </div>
           <div class="mx-1" id="plan-area" style="overflow: auto; max-height: 470px">
             <table class="table table-hover text-center light">
               <colgroup>
@@ -372,6 +389,5 @@ td {
   font-family: "EASTARJET-Medium";
   font-size: 12px;
   text-decoration: underline;
-
 }
 </style>
