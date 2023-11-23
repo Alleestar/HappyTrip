@@ -54,12 +54,12 @@ function doReset() {
 <template>
   <div class="container">
     <div class="row justify-content-center align-items-center flex-column big">
-      <div style="width: 50%">
+      <div style="width: 30%">
         <h2 class="my-1 py-3 text-center custom-heading">
           <mark class="orange">회원가입</mark>
         </h2>
       </div>
-      <div style="width: 50%">
+      <div style="width: 30%">
         <form>
           <div class="form-floating custom-label">
             <input
@@ -131,6 +131,7 @@ function doReset() {
               </select>
             </div>
           </div>
+          <br />
           <div class="col-auto text-center">
             <button type="button" class="btn btn-dark mb-3" id="register-btn" @click="doRegist">
               회원가입
@@ -139,7 +140,9 @@ function doReset() {
               초기화
             </button>
           </div>
+          <br />
         </form>
+        <br />
       </div>
     </div>
   </div>

@@ -38,6 +38,8 @@ function goToRegister() {
 <template>
   <div class="container">
     <div class="row justify-content-center big">
+      <br />
+
       <div style="width: 50%">
         <h2 class="my-1 py-3 text-center custom-heading">
           <mark class="orange">로그인</mark>
