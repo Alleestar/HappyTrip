@@ -1,4 +1,9 @@
-<script setup></script>
+<script setup>
+import { ref, provide } from "vue";
+
+const comments = ref([]);
+provide("comments", comments);
+</script>
 
 <template>
   <div class="container text-center mt-3">

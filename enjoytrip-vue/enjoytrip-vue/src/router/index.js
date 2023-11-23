@@ -2,6 +2,26 @@ import { createRouter, createWebHistory } from "vue-router";
 import TheHomeView from "@/views/TheHomeView.vue";
 import ThePlaceView from "@/views/ThePlaceView.vue";
 
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/member";
+
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore();
+  const { userInfo, isValidToken } = storeToRefs(memberStore);
+  const { getUserInfo } = memberStore;
+
+  let token = sessionStorage.getItem("accessToken");
+
+  if (userInfo.value != null && token) {
+    await getUserInfo(token);
+  }
+  if (!isValidToken.value || userInfo.value === null) {
+    next({ name: "user-login" });
+  } else {
+    next();
+  }
+};
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -47,6 +67,35 @@ const router = createRouter({
           name: "qna-comment-modify",
           component: () => import("@/components/QnA/item/QnACommentModify.vue"),
         },
+      ],
+    },
+    {
+      path: "/user",
+      name: "user",
+      component: () => import("@/views/TheUserView.vue"),
+      redirect: { name: "user-mypage" },
+      children: [
+        {
+          path: "login",
+          name: "user-login",
+          component: () => import("@/components/users/UserLogin.vue"),
+        },
+        {
+          path: "join",
+          name: "user-join",
+          component: () => import("@/components/users/UserRegister.vue"),
+        },
+        {
+          path: "mypage",
+          name: "user-mypage",
+          beforeEnter: onlyAuthUser,
+          component: () => import("@/components/users/UserMyPage.vue"),
+        },
+        // {
+        //   path: "modify/:userid",
+        //   name: "user-modify",
+        //   component: () => import("@/components/users/UserModify.vue"),
+        // },
       ],
     },
     {
