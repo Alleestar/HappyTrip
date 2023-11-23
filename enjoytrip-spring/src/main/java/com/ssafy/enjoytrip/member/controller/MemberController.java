@@ -30,10 +30,11 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> save(@RequestBody MemberDto params) throws Exception {
-		MemberDto user = memberService.saveMember(params);
+		log.info("회원가입 : {}", params);
+		memberService.saveMember(params);
 
-		if (user.getUserId() != null) {
-			return ResponseEntity.ok(user.getUserId());
+		if (params.getUserId() != null) {
+			return ResponseEntity.ok(params.getUserId());
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

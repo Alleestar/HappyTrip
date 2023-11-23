@@ -2,22 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.vue.member.model.mapper.MemberMapper">
+<mapper namespace="com.ssafy.enjoytrip.member.model.mapper.MemberMapper">
 
-	<resultMap type="memberDto" id="member">
+	<resultMap type="MemberDto" id="member">
 		<result column="user_id" property="userId"/>
 		<result column="user_name" property="userName"/>
-		<result column="user_password" property="userPwd"/>
+		<result column="user_pass" property="userPwd"/>
 		<result column="email_id" property="emailId"/>
 		<result column="email_domain" property="emailDomain"/>
 		<result column="join_date" property="joinDate"/>
 		<result column="token" property="refreshToken"/>
 	</resultMap>
 
+
 	<select id="login" parameterType="map" resultMap="member">
 		select user_id, user_name, token
 		from members
-		where user_id = #{userId} and user_password = #{userPwd}
+		where user_id = #{userId} and user_pass = #{userPwd}
 	</select>
 	
 	<select id="userInfo" parameterType="string" resultMap="member">
@@ -38,11 +39,10 @@
 		where user_id = #{userId}
 	</select>
 
-	<update id="saveMember" parameterType="MemberDto">
-		UPDATE members
-		SET token = #{token}
-		WHERE user_id = #{userId}
-	</update>
+	<insert id="saveMember" parameterType="MemberDto">
+		insert into members (user_id, user_name, user_pass, email_id, email_domain, join_date, token)
+		values (#{userId}, #{userName}, #{userPwd}, #{emailId}, #{emailDomain}, now(), #{refreshToken});
+	</insert>
 	
 	<update id="deleteRefreshToken" parameterType="map">
 		update members

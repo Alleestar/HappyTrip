@@ -34,6 +34,7 @@ export const useMemberStore = defineStore("memberStore", () => {
         }
       },
       (error) => {
+        alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
         console.error(error);
       }
     );

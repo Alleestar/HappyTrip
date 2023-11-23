@@ -41,7 +41,15 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(jwtInterceptor);
+
+		registry.addInterceptor(jwtInterceptor)
+				.addPathPatterns("/enjoytrip/**")
+				.excludePathPatterns("/enjoytrip/main/**")
+				.excludePathPatterns("/enjoytrip/attraction/**")
+				.excludePathPatterns("/enjoytrip/user/**");
+//				.excludePathPatterns("/enjoytrip/attraction")
+//				.excludePathPatterns("/enjoytrip/user")
+		;
 	}
 
 //	Swagger UI 실행시 404처리

@@ -32,9 +32,9 @@ dependencies {
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'org.springframework.security:spring-security-test'
+//	implementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('bootBuildImage') {

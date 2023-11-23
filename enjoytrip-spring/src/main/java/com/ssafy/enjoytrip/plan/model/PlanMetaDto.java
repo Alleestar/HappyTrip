@@ -6,7 +6,7 @@ import lombok.Data;
 public class PlanMetaDto {
 
     private Long planId;
-    private Long userId;
+    private String userId;
     private String title;
     private String date;
     private String color;
