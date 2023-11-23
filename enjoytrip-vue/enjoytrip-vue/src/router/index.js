@@ -40,6 +40,7 @@ const router = createRouter({
     {
       path: "/myplace",
       name: "my-place",
+      beforeEnter: onlyAuthUser,
       component: MyPlaceView,
       redirect: { name: "mp-plan-list" },
       children: [
@@ -53,6 +54,7 @@ const router = createRouter({
     {
       path: "/myplan/:id",
       name: "my-plan",
+      beforeEnter: onlyAuthUser,
       component: MyPlacePlanView,
       props: true,
       //   {
@@ -65,6 +67,7 @@ const router = createRouter({
     {
       path: "/qna",
       name: "QnA",
+      beforeEnter: onlyAuthUser,
       component: () => import("@/views/TheQnAView.vue"),
       redirect: { name: "qna-list" },
       children: [
@@ -127,6 +130,7 @@ const router = createRouter({
     {
       path: "/board",
       name: "Board",
+      beforeEnter: onlyAuthUser,
       component: () => import("@/views/TheBoardView.vue"),
       redirect: { name: "board-list" },
       children: [

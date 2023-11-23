@@ -62,6 +62,12 @@ function showCommentList() {
 }
 showCommentList();
 
+
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
 const commentContent = ref("");
 const commentDiv = ref(null);
 function goToWriteComment() {
@@ -76,7 +82,7 @@ function goToWriteComment() {
   } else {
     const c = {
       postId: qid.value,
-      id: 454321,
+      id: userInfo.value.userId,
       content: commentContent.value,
       writer: "닉네임뭐하지",
     };

@@ -1,6 +1,7 @@
 <script setup>
 import { registerUser } from "@/api/user.js";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const name = ref("");
 const userId = ref("");
@@ -8,13 +9,17 @@ const password = ref("");
 const emailId = ref("");
 const emailDomain = ref("");
 
+const router = useRouter();
+
+
 function doRegist() {
   // Gather input values
   const userData = {
-    name: name.value,
+    userName: name.value,
     userId: userId.value,
-    password: password.value,
-    email: `${emailId.value}@${emailDomain.value}`,
+    userPwd: password.value,
+    emailId: emailId.value,
+    emailDomain: emailDomain.value,
   };
 
   // Call registerUser function
@@ -24,6 +29,7 @@ function doRegist() {
       console.log("User registration successful", response);
       // Optionally, you can reset the form after successful registration
       doReset();
+      router.push({ name: "user-login" });
     })
     .catch((error) => {
       // Handle registration failure

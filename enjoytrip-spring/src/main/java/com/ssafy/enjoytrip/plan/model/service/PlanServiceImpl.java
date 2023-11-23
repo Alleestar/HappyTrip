@@ -28,7 +28,6 @@ public class PlanServiceImpl implements PlanService{
     @Transactional(readOnly = true)
     public PlanMetaListDto listPlanMeta(Map<String, String> map) throws Exception {
         Map<String, Object> param = new HashMap<String, Object>();
-        Long id = Long.parseLong(map.get("userId"));
         int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
         int sizePerPage = Integer.parseInt(map.get("spp") == null ? "7" : map.get("spp"));
         int start = currentPage * sizePerPage - sizePerPage;
@@ -37,7 +36,7 @@ public class PlanServiceImpl implements PlanService{
         param.put("start", start);
         param.put("listsize", sizePerPage);
         param.put("word", word);
-        param.put("id", id);
+        param.put("id", map.get("userId"));
 
         List<PlanMetaDto> list = pm.listPlanMeta(param);
         int totalPlanCount = pm.getTotalPlanMeta(param);
