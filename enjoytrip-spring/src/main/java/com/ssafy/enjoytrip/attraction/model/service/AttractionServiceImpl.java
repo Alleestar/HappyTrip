@@ -34,6 +34,9 @@ public class AttractionServiceImpl implements AttractionService{
         if(map.get("word") != null){
             param.put("word", map.get("word"));
         }
+        if(map.get("rand")!=null){
+            param.put("rand", 1);
+        }
         if(map.get("sidoCode") != null){
             param.put("sidoCode", Integer.parseInt(map.get("sidoCode")));
         }
