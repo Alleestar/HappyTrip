@@ -43,7 +43,7 @@ public class BoardCommentController {
 
     // 기존 댓글 수정
     @ApiOperation(value = "댓글 수정", notes = "기존의 댓글을 수정한다.")
-    @PatchMapping("/update/{postId}/{id}")
+    @PatchMapping("/update/{id}")
     public BoardCommentResponseDto updateComment(@PathVariable final Long id, @RequestBody final BoardCommentRequestDto params) {
         boardCommentService.updateComment(params);
         return boardCommentService.findCommentById(id);
@@ -51,7 +51,7 @@ public class BoardCommentController {
 
     // 기존 댓글 삭제하기
     @ApiOperation(value = "댓글 삭제", notes = "가존의 댓글을 삭제한다.")
-    @DeleteMapping("/delete/{postId}/{id}")
+    @DeleteMapping("/delete/{id}")
     public Long deleteComment(@PathVariable final Long id) {
         return boardCommentService.deleteComment(id);
     }

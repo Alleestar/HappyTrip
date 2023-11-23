@@ -80,15 +80,15 @@ searchList();
     </div>
     <div class="col-10 my-2 mx-auto">
       <div class="row">
-        <div class="d-flex flex-row justify-content-center">
-          <div class="col-1 m-1">
-            <select v-model="key" class="form-select">
+        <div class="d-flex justify-content-center">
+          <div class="m-1">
+            <select v-model="key" class="form-select" style="font-size: 15px; width: 120px">
               <option disabled value="">검색조건</option>
               <option value="tc">제목+내용</option>
               <option value="user_nickname">작성자</option>
             </select>
           </div>
-          <div class="col-6 m-1">
+          <div class="m-1">
             <input
               placeholder="질문을 검색하세요."
               class="form-control input"
@@ -97,21 +97,27 @@ searchList();
               type="text"
               v-model="word"
               @keyup.enter="searchList"
+              style="width: 350px"
             />
           </div>
-          <div class="col-1 m-1">
-            <button class="btn btn-dark" id="search-btn" @click="searchList">검색</button>
+          <div class="m-1">
+            <button
+              class="btn btn-dark"
+              id="search-btn"
+              @click="searchList"
+              style="margin-right: 30px"
+            >
+              검색
+            </button>
+            <button class="btn btn-outline-dark mx-1" id="no-content-write-btn" @click="goToWrite">
+              글 작성
+            </button>
           </div>
         </div>
       </div>
     </div>
     <div class="col-10 my-1 mx-auto" v-if="questions.length > 0">
-      <div class="container px-0 d-flex flex-column justify-content-center">
-        <div class="mx-auto">
-          <div class="d-flex justify-content-start mx-1 mb-2">
-            <button class="btn btn-outline-dark" id="write-btn" @click="goToWrite">글 작성</button>
-          </div>
-        </div>
+      <div class="container px-0 d-flex flex-column justify-content-start">
         <QnAListItem
           v-for="question in questions"
           :key="question.qnaNo"
@@ -134,9 +140,6 @@ searchList();
           첫 글을 작성해보세요.
         </p> -->
         <div class="d-flex justify-content-center my-4">
-          <button class="btn btn-dark mx-1" id="no-content-write-btn" @click="goToWrite">
-            글 작성
-          </button>
           <button class="btn btn-dark mx-1" id="no-content-write-btn" @click="refresh">목록</button>
         </div>
       </div>
@@ -179,20 +182,20 @@ select {
 
 #write-btn {
   font-family: "EASTARJET-Heavy";
-  font-size: 12px;
+  font-size: 15px;
 }
 
 #search-btn,
 #no-content-write-btn {
   font-family: "EASTARJET-Heavy";
-  font-size: 12px;
+  font-size: 15px;
   /* min-width: 48px; */
   /* max-height: 32px; */
 }
 
 #search-input-text {
   font-family: "EASTARJET-DemiLight";
-  font-size: 10px;
+  font-size: 15px;
 }
 
 #qna-container-title {
@@ -211,7 +214,7 @@ select {
 
 #qna-container-content {
   font-family: "EASTARJET-Medium";
-  font-size: 12px;
+  font-size: 15px;
   text-decoration: underline;
 }
 

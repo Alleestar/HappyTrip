@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.enjoytrip.board.model.mapper.BoardMapper">
 
     <resultMap type="BoardDto" id="Board">
-        <result column="Board_no" property="boardNo"/>
+        <result column="board_no" property="BoardNo"/>
         <result column="user_nickname" property="userNickname"/>
         <result column="datetime" property="datetime"/>
         <result column="title" property="title"/>

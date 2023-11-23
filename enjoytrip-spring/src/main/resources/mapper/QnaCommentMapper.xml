@@ -73,12 +73,9 @@
 
 
     <!-- 댓글 삭제 -->
-    <delete id="deleteById" parameterType="long">
-        UPDATE qna_comment
-        SET
-            delete_yn = 1
-        WHERE
-            id = #{id}
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM qna_comment
+        WHERE id = #{id}
     </delete>
 
 
