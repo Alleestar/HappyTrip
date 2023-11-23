@@ -11,3 +11,18 @@ body {
   height: 100vh;
   width: 100vw;
 }
+
+@font-face {
+  font-family: "EASTARJET-Heavy";
+  src: url("/fonts/EASTARJET-Heavy.ttf");
+}
+
+@font-face {
+  font-family: "EASTARJET-Medium";
+  src: url("/fonts/EASTARJET-Medium.ttf");
+}
+
+@font-face {
+  font-family: "EASTARJET-DemiLight";
+  src: url("/fonts/EASTARJET-DemiLight.ttf");
+}

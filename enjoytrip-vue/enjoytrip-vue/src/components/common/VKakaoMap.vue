@@ -5,9 +5,10 @@ const { VITE_TRIP_SERVICE_KEY } = import.meta.env;
 var map;
 const positions = ref([]);
 const markers = ref([]);
-const infoWindows = ref([]);
+const keys = ref([]);
+const infoWindows = ref(new Map());
 
-const props = defineProps({ attractions: Array, selectStation: Object });
+const props = defineProps({ attractions: Array, selectAttraction: Object });
 
 const emit = defineEmits(["showModal"]);
 function onShowModal(modalAttraction) {
@@ -27,11 +28,31 @@ function onShowModal(modalAttraction) {
 }
 
 watch(
-  () => props.selectStation.value,
+  () => props.selectAttraction,
   () => {
     // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(props.selectStation.lat, props.selectStation.lng);
-
+    var moveLatLon;
+    if(props.selectAttraction.latitude){
+      moveLatLon = new kakao.maps.LatLng(
+      props.selectAttraction.latitude,
+      props.selectAttraction.longitude
+      );
+      // console.log(props.selectAttraction.contentId)
+      infoWindows.value.get(props.selectAttraction.contentId).setMap(map);
+      document.getElementById(`openModalBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
+        onShowModal(props.selectAttraction);
+      });
+      document.getElementById(`closeBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
+        infoWindows.value.get(props.selectAttraction.contentId).setMap(null);
+      });
+    } else {
+      moveLatLon = new kakao.maps.LatLng(
+      props.selectAttraction.latlng.Ma,
+      props.selectAttraction.latlng.La
+      );
+      
+    }
+    
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
@@ -60,12 +81,12 @@ const getCat = (param, modalAttraction) => {
     ({ data }) => {
       if (data.response.body.items.item[0].name) {
         modalCategory.value = data.response.body.items.item[0].name;
-        const available = ref(true);
-        emit("showModal", modalAttraction, modalCategory, available);
+        emit("showModal", modalAttraction, modalCategory);
       }
     },
     (error) => {
       console.log(error);
+      emit("showModal", modalAttraction, "");
     }
   );
 };
@@ -78,7 +99,8 @@ watch(
       props.attractions.forEach((attraction) => {
         let obj = {};
         obj.contentId = attraction.contentId;
-        (obj.contentTypeId = attraction.contentTypeId), (obj.img1 = attraction.img1);
+        obj.contentTypeId = attraction.contentTypeId, 
+        obj.img1 = attraction.img1;
         obj.cat1 = attraction.cat1;
         obj.cat2 = attraction.cat2;
         obj.cat3 = attraction.cat3;
@@ -116,7 +138,8 @@ const loadMarkers = () => {
 
   // 마커를 생성합니다
   markers.value = [];
-  infoWindows.value = [];
+  keys.value = [];
+  infoWindows.value = new Map();
   positions.value.forEach((position) => {
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
@@ -126,21 +149,36 @@ const loadMarkers = () => {
       // image: markerImage, // 마커의 이미지
     });
 
-    const infoWindow = new kakao.maps.InfoWindow({
+    const infoWindow = new kakao.maps.CustomOverlay({
       position: position.latlng,
-      content: `<div style="display:flex; flex-direction: column; padding:5px; height:65px">
-                  <p  class="medium mb-0 p-0" style="display:flex; flex-wrap:nowrap; font-size: 10px">${position.title}</p>
-                  <div class="d-flex justify-content-center">
-                  <button class="btn btn-dark medium p-1" style="font-size: 10px" id="openModalBtn${position.contentId}" data-bs-toggle="modal" data-bs-target="#placeDetail">상세보기</button>
+      content: `<div class="container info">
+                  <p  class="medium mb-0 p-0" style="display:flex; justify-content:center; font-size: 12px">${position.title}</p>
+                  <div style="display:flex;" >
+                  <button class="btn btn-dark medium p-1 mx-1" style= "display:flex; justify-content:center; height: 20px; width: 20px" id="openModalBtn${position.contentId}" data-bs-toggle="modal" data-bs-target="#placeDetail">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="white" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>                  
+                    </button>
+                    <button class="btn btn-dark medium info-btn p-1 "  style= "display:flex; justify-content:center; height: 20px; width: 20px"  id="closeBtn${position.contentId}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="white" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                      </svg>  
+                    </button>
                     </div>
-                  </div>`,
+                  </div>
+                </div>`,
     });
-    infoWindows.value.push(infoWindow);
-    infoWindow.open(map, marker);
-    document.getElementById(`openModalBtn${position.contentId}`).addEventListener("click", () => {
-      // console.log("click");
-      // console.log(position);
-      onShowModal(position);
+
+    keys.value.push(position.contentId);
+    infoWindows.value.set(position.contentId ,infoWindow);
+    kakao.maps.event.addListener(marker, "click", function () {
+      infoWindow.setMap(map);
+      document.getElementById(`openModalBtn${position.contentId}`).addEventListener("click", () => {
+        onShowModal(position);
+      });
+      document.getElementById(`closeBtn${position.contentId}`).addEventListener("click", () => {
+        infoWindow.setMap(null);
+      });
     });
 
     markers.value.push(marker);
@@ -161,8 +199,9 @@ const deleteMarkers = () => {
   if (markers.value.length > 0) {
     markers.value.forEach((marker) => marker.setMap(null));
   }
-  if (infoWindows.value.length > 0) {
-    infoWindows.value.forEach((infowindow) => infowindow.close());
+  if (keys.value.length > 0) {
+    keys.value.forEach((key) => infoWindows.value.get(key).setMap(null));
+    keys.value = [];
   }
 };
 // const deleteInfoWindows = () => {
@@ -207,5 +246,15 @@ const deleteMarkers = () => {
 
 .light {
   font-family: "EASTARJET-DemiLight";
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: white;
+  border: solid 2px;
 }
 </style>
