@@ -32,27 +32,30 @@ watch(
   () => {
     // 이동할 위도 경도 위치를 생성합니다
     var moveLatLon;
-    if(props.selectAttraction.latitude){
+    if (props.selectAttraction.latitude) {
       moveLatLon = new kakao.maps.LatLng(
-      props.selectAttraction.latitude,
-      props.selectAttraction.longitude
+        props.selectAttraction.latitude,
+        props.selectAttraction.longitude
       );
       // console.log(props.selectAttraction.contentId)
       infoWindows.value.get(props.selectAttraction.contentId).setMap(map);
-      document.getElementById(`openModalBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
-        onShowModal(props.selectAttraction);
-      });
-      document.getElementById(`closeBtn${props.selectAttraction.contentId}`).addEventListener("click", () => {
-        infoWindows.value.get(props.selectAttraction.contentId).setMap(null);
-      });
+      document
+        .getElementById(`openModalBtn${props.selectAttraction.contentId}`)
+        .addEventListener("click", () => {
+          onShowModal(props.selectAttraction);
+        });
+      document
+        .getElementById(`closeBtn${props.selectAttraction.contentId}`)
+        .addEventListener("click", () => {
+          infoWindows.value.get(props.selectAttraction.contentId).setMap(null);
+        });
     } else {
       moveLatLon = new kakao.maps.LatLng(
-      props.selectAttraction.latlng.Ma,
-      props.selectAttraction.latlng.La
+        props.selectAttraction.latlng.Ma,
+        props.selectAttraction.latlng.La
       );
-      
     }
-    
+
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
@@ -99,8 +102,7 @@ watch(
       props.attractions.forEach((attraction) => {
         let obj = {};
         obj.contentId = attraction.contentId;
-        obj.contentTypeId = attraction.contentTypeId, 
-        obj.img1 = attraction.img1;
+        (obj.contentTypeId = attraction.contentTypeId), (obj.img1 = attraction.img1);
         obj.cat1 = attraction.cat1;
         obj.cat2 = attraction.cat2;
         obj.cat3 = attraction.cat3;
@@ -170,7 +172,7 @@ const loadMarkers = () => {
     });
 
     keys.value.push(position.contentId);
-    infoWindows.value.set(position.contentId ,infoWindow);
+    infoWindows.value.set(position.contentId, infoWindow);
     kakao.maps.event.addListener(marker, "click", function () {
       infoWindow.setMap(map);
       document.getElementById(`openModalBtn${position.contentId}`).addEventListener("click", () => {

@@ -10,6 +10,8 @@ const desc = ref("");
 const available = ref("false");
 const planList = ref([]);
 const isPlaneOpen = ref(false);
+const currentPage = ref(1);
+const totalPageCount = ref(1);
 
 watch(props, () => {
   attr.value = {};
@@ -68,11 +70,14 @@ loadPlanList();
 function loadPlanList() {
   const planMeta = {
     userId: 1,
+    pgno: currentPage.value,
   };
   listPlanMeta(
     planMeta,
     ({ data }) => {
       planList.value = data.plans;
+      currentPage.value = data.currentPage;
+      totalPageCount.value = data.totalPageCount;
     },
     (error) => {
       console.log("error");
@@ -88,6 +93,22 @@ function getToday() {
 
   let dateString = year + "/" + month + "/" + day;
   return dateString;
+}
+
+function prevPage() {
+  console.log(currentPage.value, totalPageCount.value);
+  if (currentPage.value > 1) {
+    --currentPage.value;
+    loadPlanList();
+  }
+}
+
+function nextPage() {
+  console.log(currentPage.value, totalPageCount.value);
+  if (currentPage.value < totalPageCount.value) {
+    ++currentPage.value;
+    loadPlanList();
+  }
 }
 </script>
 
@@ -143,6 +164,7 @@ function getToday() {
                 class="dropdown-menu px-2"
                 style="display: flex; justify-content: start"
               >
+                <li class="mx-1"><button class="btn ball page-btn" @click="prevPage">◀</button></li>
                 <PlacePlanListItem
                   v-for="plan in planList"
                   :key="plan.planId"
@@ -168,6 +190,7 @@ function getToday() {
                     </svg>
                   </a>
                 </li>
+                <li class="mx-1"><button class="btn ball page-btn" @click="nextPage">▶</button></li>
               </ul>
             </div>
           </div>
@@ -180,6 +203,10 @@ function getToday() {
 </template>
 
 <style scoped>
+.page-btn {
+  padding: 6px;
+  color: gray;
+}
 .ball {
   width: 20px;
   height: 20px;
