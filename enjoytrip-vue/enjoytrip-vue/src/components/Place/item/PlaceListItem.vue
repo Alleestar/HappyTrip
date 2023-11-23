@@ -41,8 +41,7 @@ const getCat = () => {
 const emit = defineEmits(["showModal"])
 function onShowModal(){
   const attraction = props.attraction;
-  const available = ref(true);
-  emit("showModal", attraction, category, available);
+  emit("showModal", attraction, category);
 }
 </script>
 
@@ -74,7 +73,7 @@ function onShowModal(){
 </template>
 
 <style scoped>
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -87,7 +86,7 @@ function onShowModal(){
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .heavy {
   font-family: "EASTARJET-Heavy";
