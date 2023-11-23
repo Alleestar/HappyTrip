@@ -1,8 +1,18 @@
-<script setup></script>
+<script setup>
+import { ref, provide } from "vue";
+
+const comments = ref([]);
+provide("comments", comments);
+</script>
 
 <template>
   <div class="container text-center mt-3">
-    <div class="alert alert-primary" role="alert">Member Service</div>
+    <!-- GIF를 추가하는 부분 -->
+
+    <img src="@/assets/admaru.gif" alt="Loading GIF" />
+    <br />
+
+    <!-- 기존의 내용 -->
     <router-view></router-view>
   </div>
 </template>
