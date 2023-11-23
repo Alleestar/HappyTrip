@@ -81,7 +81,9 @@
           style="--bs-scroll-height: 100px"
         >
           <li class="nav-item">
-            <a class="nav-link menu-font-sm" href="#" role="button"> 로그인 </a>
+            <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'user' }"
+              >로그인</router-link
+            >
           </li>
         </ul>
       </div>

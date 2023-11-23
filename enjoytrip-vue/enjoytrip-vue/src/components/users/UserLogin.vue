@@ -19,18 +19,20 @@ const loginUser = ref({
 });
 
 const login = async () => {
-  console.log("login ing!!!! !!!");
   await userLogin(loginUser.value);
   let token = sessionStorage.getItem("accessToken");
-  console.log("111. ", token);
-  console.log("isLogin: ", isLogin);
   if (isLogin) {
-    console.log("로그인 성공아닌가???");
     getUserInfo(token);
     changeMenuState();
   }
   router.push("/");
 };
+
+function goToRegister() {
+  router.push({
+    name: "user-join",
+  });
+}
 </script>
 
 <template>
@@ -70,7 +72,9 @@ const login = async () => {
             <button type="button" class="btn btn-outline-primary mb-3" @click="login">
               로그인
             </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3">회원가입</button>
+            <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="goToRegister">
+              회원가입
+            </button>
           </div>
         </form>
       </div>
