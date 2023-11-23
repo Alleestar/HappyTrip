@@ -7,7 +7,10 @@ provide("comments", comments);
 
 <template>
   <div class="container text-center mt-3">
-    <div class="alert alert-primary" role="alert">Member Service</div>
+    <!-- GIF를 추가하는 부분 -->
+    <img src="@/assets/admaru.gif" alt="Loading GIF" />
+
+    <!-- 기존의 내용 -->
     <router-view></router-view>
   </div>
 </template>
