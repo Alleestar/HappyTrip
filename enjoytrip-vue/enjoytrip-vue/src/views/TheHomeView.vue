@@ -1,7 +1,19 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import VKakaoMap from "../components/common/VKakaoMap.vue";
+
+const attractions = ref([]);
+const selectAttraction = ref({});
+</script>
 
 <template>
-  <div id="body"></div>
+  <div id="body">
+    <VKakaoMap
+      :attractions="attractions"
+      :selectAttraction="selectAttraction"
+      style="visibility: hidden"
+    />
+  </div>
 </template>
 
 <style scoped>

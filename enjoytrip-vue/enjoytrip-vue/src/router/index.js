@@ -42,7 +42,6 @@ const router = createRouter({
       name: "my-plan",
       component: MyPlacePlanView,
       props: true,
-      // children: [
       //   {
       //     path: "plan", // children 에서는 /가 붙기 때문에 빼야함
       //     name: "mp-plan-list",
