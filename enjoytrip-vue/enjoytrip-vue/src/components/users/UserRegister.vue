@@ -63,7 +63,7 @@ function doReset() {
         <form>
           <div class="form-floating custom-label">
             <input
-              type="password"
+              type="text"
               class="form-control"
               v-model="name"
               @keyup.enter="login"
