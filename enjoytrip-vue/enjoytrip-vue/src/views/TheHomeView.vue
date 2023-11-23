@@ -10,7 +10,7 @@ const ROOT = "/src/assets/mainPage/main-";
 const imgs = ref([]);
 
 for (let i = 2; i < 6; ++i) {
-  imgs.value.push(ROOT + i + ".jpg");
+  imgs.value.push( ROOT + i + ".jpg");
 }
 </script>
 
