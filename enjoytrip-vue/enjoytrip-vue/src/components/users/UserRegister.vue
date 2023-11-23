@@ -53,38 +53,73 @@ function doReset() {
 
 <template>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
+    <div class="row justify-content-center align-items-center flex-column big">
+      <div style="width: 50%">
+        <h2 class="my-1 py-3 text-center custom-heading">
           <mark class="orange">회원가입</mark>
         </h2>
       </div>
-      <div class="col-lg-10 text-start">
+      <div style="width: 50%">
         <form>
-          <div class="mb-3">
-            <label for="username" class="form-label">이름 : </label>
-            <input v-model="name" type="text" class="form-control" placeholder="이름..." />
+          <div class="form-floating custom-label">
+            <input
+              type="password"
+              class="form-control"
+              v-model="name"
+              @keyup.enter="login"
+              placeholder="이름"
+            />
+            <label for="floatingInputInvalid">Name</label>
           </div>
-          <div class="mb-3">
-            <label for="userid" class="form-label">아이디 : </label>
-            <input v-model="userId" type="text" class="form-control" placeholder="아이디..." />
+
+          <br />
+          <div class="form-floating custom-label">
+            <input
+              v-model="userId"
+              type="text"
+              class="form-control"
+              id="btn2"
+              placeholder="아이디..."
+            />
+            <label for="floatingInputInvalid">ID</label>
           </div>
-          <div class="mb-3">
-            <label for="userpwd" class="form-label">비밀번호 : </label>
-            <input v-model="password" type="text" class="form-control" placeholder="비밀번호..." />
+          <br />
+          <div class="form-floating custom-label">
+            <input
+              type="password"
+              class="form-control"
+              v-model="password"
+              @keyup.enter="login"
+              placeholder="비밀번호..."
+            />
+            <label for="floatingInputInvalid">Password</label>
           </div>
-          <div class="mb-3">
+          <br />
+          <div class="form-floating custom-label">
+            <input
+              type="password"
+              class="form-control"
+              v-model="pwdcheck"
+              @keyup.enter="login"
+              placeholder="비밀번호..."
+            />
+            <label for="floatingInputInvalid">Password Check</label>
+          </div>
+
+          <!-- <div class="mb-3">
             <label for="pwdcheck" class="form-label">비밀번호확인 : </label>
-            <input type="text" class="form-control" id="pwdcheck" placeholder="비밀번호확인..." />
-          </div>
+            <input type="text" class="form-control" id="btn4" placeholder="비밀번호확인..." />
+          </div> -->
+          <br />
           <div class="mb-3">
-            <label for="emailid" class="form-label">이메일 : </label>
+            <!-- <label for="emailid" class="form-label">이메일 : </label> -->
             <div class="input-group">
               <input
                 v-model="emailId"
                 type="text"
                 class="form-control"
-                placeholder="이메일아이디"
+                placeholder="Email ID"
+                id="btn5"
               />
               <span class="input-group-text">@</span>
               <select v-model="emailDomain" class="form-select" aria-label="이메일 도메인 선택">
@@ -97,10 +132,10 @@ function doReset() {
             </div>
           </div>
           <div class="col-auto text-center">
-            <button type="button" class="btn btn-outline-primary mb-3" @click="doRegist">
+            <button type="button" class="btn btn-dark mb-3" id="register-btn" @click="doRegist">
               회원가입
             </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="doReset">
+            <button type="button" class="btn btn-dark ms-1 mb-3" id="reset-btn" @click="doReset">
               초기화
             </button>
           </div>
@@ -110,4 +145,19 @@ function doReset() {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#btn1,
+#btn2 #btn3 {
+  font-family: "EASTARJET-Heavy";
+}
+
+#reset-btn,
+#register-btn {
+  font-family: "EASTARJET-Heavy";
+}
+
+h2.custom-heading {
+  font-family: "EASTARJET-Heavy"; /* 여기서 'YourDesiredFont'를 원하는 글꼴로 변경하세요 */
+  /* 추가적인 스타일 조정이나 속성을 필요에 따라 추가할 수 있습니다. */
+}
+</style>
