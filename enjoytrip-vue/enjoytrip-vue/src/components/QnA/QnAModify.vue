@@ -4,6 +4,12 @@ import { ref } from "vue";
 import { modifyQna } from "@/api/qna.js";
 const router = useRouter();
 
+
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
 //v-model과 연결한 반응형 변수 선언
 const title = ref("");
 title.value = history.state.title;

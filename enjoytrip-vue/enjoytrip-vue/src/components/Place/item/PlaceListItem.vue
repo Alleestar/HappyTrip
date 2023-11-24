@@ -38,18 +38,22 @@ const getCat = () => {
   );
 };
 
-const emit = defineEmits(["showModal"])
-function onShowModal(){
+const emit = defineEmits(["showModal"]);
+function onShowModal() {
   const attraction = props.attraction;
-  const available = ref(true);
-  emit("showModal", attraction, category, available);
+  emit("showModal", attraction, category);
 }
 </script>
 
 <template>
   <div>
     <div class="container m-0 p-3 border">
-      <button @click="onShowModal" class="article" data-bs-toggle="modal" data-bs-target="#placeDetail">
+      <button
+        @click="onShowModal"
+        class="article"
+        data-bs-toggle="modal"
+        data-bs-target="#placeDetail"
+      >
         <div class="desc mx-1">
           <h6 class="medium article-title font-weight-bold">
             <b>{{ attraction.title }}</b>
@@ -74,7 +78,7 @@ function onShowModal(){
 </template>
 
 <style scoped>
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -87,7 +91,7 @@ function onShowModal(){
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .heavy {
   font-family: "EASTARJET-Heavy";
@@ -108,7 +112,6 @@ function onShowModal(){
 }
 
 .article {
-  
   text-decoration: none;
   color: inherit;
   display: flex;

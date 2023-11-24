@@ -1,28 +1,28 @@
 <script setup>
-defineProps({ question: Object });
+defineProps({ board: Object });
 </script>
 
 <template>
   <div class="container m-1 p-4 border">
     <router-link
       class="article d-flex justify-content-between"
-      :to="{ name: 'qna-detail', query: { qid: question.qnaNo } }"
+      :to="{ name: 'board-detail', query: { qid: board.boardNo } }"
     >
       <div class="desc col-9">
         <h6 class="medium article-title font-weight-bold">
-          <b>{{ question.title }}</b>
+          <b>{{ board.title }}</b>
         </h6>
         <p class="light article-content mb-2">
-          {{ question.content }}
+          {{ board.content }}
         </p>
         <div class="info">
-          <span class="meta-info text-secondary">{{ question.datetime }}</span>
+          <span class="meta-info text-secondary">{{ board.datetime }}</span>
           <span class="meta-info text-secondary"> ∙ </span>
-          <span class="meta-info text-secondary">{{ question.userNickname }}</span>
+          <span class="meta-info text-secondary">{{ board.userNickname }}</span>
         </div>
       </div>
-      <div class="article-img-shape" v-if="question.img">
-        <img class="article-img" src="{{question.img}}" />
+      <div class="article-img-shape" v-if="board.img">
+        <img class="article-img" src="{{board.img}}" />
       </div>
       <div>
         <img class="article-img" src="@/assets/pictures.png" />
@@ -61,7 +61,7 @@ defineProps({ question: Object });
 
 .meta-info {
   font-family: "EASTARJET-DemiLight";
-  font-size: 8px;
+  font-size: 15px;
 }
 
 .article {
@@ -70,11 +70,11 @@ defineProps({ question: Object });
 }
 
 .article-content {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .article-title {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .article-img-shape {

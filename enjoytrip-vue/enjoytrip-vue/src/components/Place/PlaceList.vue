@@ -2,7 +2,6 @@
 import { ref, watch } from "vue";
 import PlacePageNavigation from "@/components/Place/PlacePageNavigation.vue";
 import PlaceListItem from "@/components/Place/item/PlaceListItem.vue";
-import PlaceDetail from "@/components/Place/PlaceDetail.vue";
 import { listAttraction, getAddr } from "@/api/attraction.js";
 
 const init = ref(true);
@@ -69,10 +68,10 @@ function onPageChange(value) {
 const emit = defineEmits(["showMap", "showModal"]);
 // const modalAttraction = ref({})
 const modalCategory = ref("")
-function onShowModal(modalAttraction, category, available){
+function onShowModal(modalAttraction, category){
   // modalAttraction.value = attraction;
   modalCategory.value = category.value;
-  emit("showModal", modalAttraction, modalCategory, available);
+  emit("showModal", modalAttraction, modalCategory);
 }
 
 function onShowMap(attractions) {
@@ -233,7 +232,7 @@ function onShowMap(attractions) {
   flex: 1;
 }
 
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -246,7 +245,7 @@ function onShowMap(attractions) {
 @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 .container-no-content {
   display: flex;
