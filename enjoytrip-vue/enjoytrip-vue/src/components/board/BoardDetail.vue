@@ -64,6 +64,13 @@ showCommentList();
 
 const commentContent = ref("");
 const commentDiv = ref(null);
+
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/member";
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
 function goToWriteComment() {
   //사용자 입력 값을 체크하기
   let err = false;
@@ -76,9 +83,8 @@ function goToWriteComment() {
   } else {
     const c = {
       postId: qid.value,
-      id: 454321,
       content: commentContent.value,
-      writer: "닉네임뭐하지",
+      writer: userInfo.value.userName,
     };
 
     savaComment(
@@ -102,7 +108,7 @@ function goToWriteComment() {
   <div class="row container-fluid m-1 d-flex align-content-start justify-content-center">
     <div class="col-10 mt-4">
       <div class="container p-3 border">
-        <h5 class="m-0" id="container-title">Board</h5>
+        <h5 class="m-0" id="container-title">자유게시판</h5>
       </div>
     </div>
     <div class="col-10 mt-2">
@@ -135,6 +141,7 @@ function goToWriteComment() {
           v-for="c in searchComment"
           :key="c.id"
           :comment="c"
+          @reload-comment="showCommentList"
         ></BoardCommentListItem>
       </div>
 

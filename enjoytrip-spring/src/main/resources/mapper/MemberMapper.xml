@@ -49,5 +49,17 @@
 		set token = #{token, jdbcType=VARCHAR}
 		where user_id = #{userId}
 	</update>
+
+	<update id="modifyMember" parameterType="MemberDto">
+		update members
+		set email_id = #{emailId}, email_domain = #{emailDomain}, user_name = #{userName}
+		where user_id = #{userId}
+	</update>
+
+
+	<delete id="deleteMember" parameterType="string">
+		delete from members
+		where user_id = #{userId}
+	</delete>
 	
 </mapper>

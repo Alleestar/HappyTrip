@@ -15,7 +15,7 @@ defineProps({ board: Object });
         <p class="light article-content mb-2">
           {{ board.content }}
         </p>
-        <div class="info">
+        <div>
           <span class="meta-info text-secondary">{{ board.datetime }}</span>
           <span class="meta-info text-secondary"> ∙ </span>
           <span class="meta-info text-secondary">{{ board.userNickname }}</span>

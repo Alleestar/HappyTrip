@@ -25,8 +25,6 @@ const login = async () => {
     getUserInfo(token);
     changeMenuState();
   }
-  router.push("/"); 
-  
 };
 
 function goToRegister() {

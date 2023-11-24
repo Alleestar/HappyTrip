@@ -2,8 +2,9 @@
 import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from "pinia";
 const memberStore = useMemberStore();
-const { isLogin, userInfo, userLogout } = storeToRefs(memberStore);
-if(isLogin.value){
+const { isLogin, userInfo } = storeToRefs(memberStore);
+const { userLogout } = memberStore;
+if (isLogin.value) {
   console.log(userInfo.value);
 }
 </script>
@@ -62,7 +63,8 @@ if(isLogin.value){
           </li>
         </ul>
         <!-- 커뮤니티 -->
-        <ul v-if="isLogin"
+        <ul
+          v-if="isLogin"
           class="navbar-nav my-2 me-1 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
@@ -91,7 +93,7 @@ if(isLogin.value){
           </li>
         </ul>
         <!-- 로그인 / 로그아웃 -->
-        <ul 
+        <ul
           class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
@@ -101,12 +103,15 @@ if(isLogin.value){
             >
           </li>
           <li class="nav-item" v-if="isLogin && userInfo">
-            <router-link class="medium" style="color:black" href="#" :to="{ name: 'user' }"
-              >{{userInfo.userName}}</router-link>
+            <router-link class="medium" style="color: black" href="#" :to="{ name: 'user' }">{{
+              userInfo.userName
+            }}</router-link>
             <span class="light me-4">님, 환영합니다.</span>
           </li>
           <li class="nav-item" v-if="isLogin">
-            <a class="dropdown-item menu-font-sm" @click="userLogout(userInfo.userId)">로그아웃</a>
+            <button class="dropdown-item menu-font-sm" @click="userLogout(userInfo.userId)">
+              로그아웃
+            </button>
           </li>
         </ul>
       </div>
@@ -130,17 +135,16 @@ if(isLogin.value){
   src: url("/fonts/EASTARJET-Light.ttf");
 }
 
-.heavy{
+.heavy {
   font-family: "EASTARJET-Heavy";
 }
-.medium{
+.medium {
   font-family: "EASTARJET-Medium";
 }
 
-.light{
+.light {
   font-family: "EASTARJET-Light";
 }
-
 
 nav {
   /* display: flex; */

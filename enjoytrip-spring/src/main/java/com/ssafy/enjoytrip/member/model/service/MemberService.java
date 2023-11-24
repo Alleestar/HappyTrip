@@ -11,5 +11,9 @@ public interface MemberService {
 	void deleRefreshToken(String userId) throws Exception;
 
 	void saveMember(MemberDto user) throws Exception;
+
+	void modifyMember(MemberDto user) throws Exception;
+
+	void deleteMember(String userId) throws Exception;
 	
 }

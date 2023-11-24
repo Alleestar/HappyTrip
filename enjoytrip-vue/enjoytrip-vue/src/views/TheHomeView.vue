@@ -1,10 +1,9 @@
 <script setup>
-import { ref} from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import MainReco from "@/components/main/MainReco.vue";
 import MainImage from "@/components/main/MainImage.vue";
-
 
 const attractions = ref([]);
 const selectAttraction = ref({});
@@ -25,15 +24,16 @@ const query2 = ref("해수욕장");
 const white = ref("white");
 const black = ref("black");
 for (let i = 2; i < 6; ++i) {
-    imgs.value.push(ROOT + i + ".jpg");
+  imgs.value.push(ROOT + i + ".jpg");
 }
 
-
-
-
-
+const imgSrc1 = ref(
+  "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Camping.png"
+);
+const imgSrc2 = ref(
+  "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Water%20Wave.png"
+);
 </script>
-
 <template>
   <div id="body">
     <div id="list">
@@ -42,7 +42,15 @@ for (let i = 2; i < 6; ++i) {
           <div id="demo" class="carousel slide" data-bs-ride="carousel" data-interval="6000">
             <!-- The slideshow/carousel -->
             <div class="carousel-inner" style="background-color: black">
-              <div class="carousel-item active" style ="{display: flex; justify-content: center}">
+              <div
+                class="carousel-item active"
+                style="
+                   {
+                    display: flex;
+                    justify-content: center;
+                  }
+                "
+              >
                 <img
                   :src="ROOT + 1 + '.jpg'"
                   class="d-block"
@@ -59,24 +67,38 @@ for (let i = 2; i < 6; ++i) {
         </div>
       </div>
       <div class="col-10 mx-auto">
-        <div class="container p-4 my-4" style="width: 100%; height: 250px;">
-          <div id="content-logo-area" style="display: flex; justify-content: center;">
+        <div class="container p-4 my-4" style="width: 100%; height: 250px">
+          <div id="content-logo-area" style="display: flex; justify-content: center">
             <img class="me-1" src="/src/assets/EnjoyTrip-logo.png" width="50" height="50" />
             <p class="heavy m-0" style="font-size: 28px">EnjoyTrip</p>
           </div>
-          <div class="my-3" style="display: flex; justify-content: center;">
-            <span class="medium me-1" style="font-size: 17px;">여행지를 찾고 저장할 수 있어요.</span>
+          <div class="my-3" style="display: flex; justify-content: center">
+            <span class="medium me-1" style="font-size: 17px">여행지를 찾고 저장할 수 있어요.</span>
           </div>
-          <div style="display: flex; justify-content: center;">
-            <button class="btn btn-dark heavy" style="font-size: 14px" @click="goToSearch">검색하러 가기</button>
+          <div style="display: flex; justify-content: center">
+            <button class="btn btn-dark heavy" style="font-size: 14px" @click="goToSearch">
+              검색하러 가기
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-10 mx-auto">
-        <MainReco :title="title1" :query="query1"  :_color="white" :_back_ground="black" />
+      <div class="col-10 mx-auto d-flex justify-content-center">
+        <MainReco
+          :title="title1"
+          :query="query1"
+          :_color="white"
+          :_back_ground="black"
+          :imgSrc="imgSrc1"
+        />
       </div>
-      <div class="col-10 mx-auto">
-        <MainReco :title="title2" :query="query2" :_color="black" :_back_ground="white" />
+      <div class="col-10 mx-auto d-flex justify-content-center">
+        <MainReco
+          :title="title2"
+          :query="query2"
+          :_color="black"
+          :_back_ground="white"
+          :imgSrc="imgSrc2"
+        />
       </div>
     </div>
 
