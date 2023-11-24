@@ -12,11 +12,13 @@ const goToModify = () => {
   });
 };
 
+const emit = defineEmits("reloadComment");
 function goToDeleteComment() {
   deleteComment(
     currComment.comment.id,
     ({ data }) => {
       console.log("댓글 삭제 성공");
+      emit("reloadComment");
     },
     (error) => {
       console.log("댓글 삭제 에러 발생");

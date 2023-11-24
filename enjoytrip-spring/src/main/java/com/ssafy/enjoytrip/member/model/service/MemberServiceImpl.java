@@ -53,4 +53,14 @@ public class MemberServiceImpl implements MemberService {
 		memberMapper.saveMember(memberDto);
 	}
 
+	@Override
+	public void modifyMember(MemberDto user) throws Exception {
+		memberMapper.modifyMember(user);
+	}
+
+	@Override
+	public void deleteMember(String userId) throws Exception {
+		memberMapper.deleteMember(userId);
+	}
+
 }

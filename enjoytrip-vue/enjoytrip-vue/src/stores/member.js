@@ -27,14 +27,17 @@ export const useMemberStore = defineStore("memberStore", () => {
           isValidToken.value = true;
           sessionStorage.setItem("accessToken", accessToken);
           sessionStorage.setItem("refreshToken", refreshToken);
+          router.push({ name: "home" });
         } else {
           isLogin.value = false;
           isLoginError.value = true;
           isValidToken.value = false;
+          router.push({ name: "user-login" });
         }
       },
       (error) => {
         alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        router.push({ name: "user-login" });
         console.error(error);
       }
     );
@@ -110,6 +113,7 @@ export const useMemberStore = defineStore("memberStore", () => {
           isLogin.value = false;
           userInfo.value = null;
           isValidToken.value = false;
+          router.push({ name: "home" });
         } else {
           console.error("유저 정보 없음!!!!");
         }
