@@ -3,6 +3,15 @@
 
 <mapper namespace="com.ssafy.enjoytrip.board_comment.model.mapper.BoardCommentMapper">
 
+    <resultMap type="BoardCommentResponseDto" id="comment">
+        <result column="id" property="id"/>
+        <result column="post_id" property="postId"/>
+        <result column="content" property="content"/>
+        <result column="writer" property="writer"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="modified_date" property="modifiedDate"/>
+    </resultMap>
+
     <!-- tb_comment 테이블 전체 컬럼 -->
     <sql id="commentColumns">
         id
@@ -15,13 +24,22 @@
     </sql>
 
 
+    <sql id="commentInsertColumns">
+        post_id
+        , content
+        , writer
+        , delete_yn
+        , created_date
+        , modified_date
+    </sql>
+
+
     <!-- 댓글 저장 -->
     <insert id="save" parameterType="BoardCommentRequestDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO board_comment (
-        <include refid="commentColumns" />
+        <include refid="commentInsertColumns" />
         ) VALUES (
-        #{id}
-        , #{postId}
+        #{postId}
         , #{content}
         , #{writer}
         , 0
@@ -55,17 +73,14 @@
 
 
     <!-- 댓글 삭제 -->
-    <delete id="deleteById" parameterType="long">
-        UPDATE board_comment
-        SET
-            delete_yn = 1
-        WHERE
-            id = #{id}
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM board_comment
+        WHERE id = #{id}
     </delete>
 
 
     <!-- 댓글 리스트 조회 -->
-    <select id="findAll" parameterType="long" resultType="BoardCommentResponseDto">
+    <select id="findAll" parameterType="long" resultMap="comment">
         SELECT
         <include refid="commentColumns" />
         FROM
@@ -73,8 +88,7 @@
         WHERE
         delete_yn = 0
         AND post_id = #{value}
-        ORDER BY
-        id DESC
+
     </select>
 
 </mapper>

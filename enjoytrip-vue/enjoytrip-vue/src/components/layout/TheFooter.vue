@@ -9,10 +9,10 @@
 </template>
 
 <style scoped>
-@font-face {
+/* @font-face {
   font-family: "EASTARJET-DemiLight";
   src: url("/fonts/EASTARJET-DemiLight.ttf");
-}
+} */
 
 #footer {
   margin-top: auto;

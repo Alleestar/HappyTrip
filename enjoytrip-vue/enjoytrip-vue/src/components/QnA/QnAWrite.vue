@@ -8,6 +8,11 @@ const router = useRouter();
 const title = ref("");
 const content = ref("");
 
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
 /*
 Dom과 연결할 반응형 변수 선언, setup에서는 DOM tree가 구성되지 않았기 때문에
 mounted 이후에 접근이 가능하다.
@@ -29,7 +34,7 @@ function goToWrite() {
     const question = {
       title: title.value,
       content: content.value,
-      userNickname: "test닉네임",
+      userNickname: userInfo.value.userName
     };
     registQna(question, 
     ({ data }) => {
