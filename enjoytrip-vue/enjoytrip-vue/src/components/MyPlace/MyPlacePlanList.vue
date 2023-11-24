@@ -4,7 +4,10 @@ import PageNavigation from "@/components/common/PageNavigation.vue";
 import { useRouter } from "vue-router";
 import MyPlacePlanListItem from "@/components/MyPlace/item/MyPlacePlanListItem.vue";
 import { listPlanMeta, createPlanMeta } from "@/api/plan.js";
-
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
 // 화면 이동
 const router = useRouter();
 function goToPlan() {
@@ -22,7 +25,7 @@ const searchedPlanRow2 = ref([]);
 const params = {
   pgno: 1,
   spp: import.meta.env.VITE_SAVED_TRIP_LIST_SIZE,
-  userId: 1,
+  userId: userInfo.value.userId,
   word: word.value,
 };
 
@@ -52,7 +55,7 @@ function onPageChange(value) {
 
 function makeNewPlanList() {
   const planMeta = {
-    userId: 1,
+    userId: userInfo.value.userId,
   };
   createPlanMeta(
     planMeta,

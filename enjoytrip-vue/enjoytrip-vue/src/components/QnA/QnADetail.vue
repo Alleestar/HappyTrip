@@ -62,8 +62,14 @@ function showCommentList() {
 }
 showCommentList();
 
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
 const commentContent = ref("");
 const commentDiv = ref(null);
+
 function goToWriteComment() {
   //사용자 입력 값을 체크하기
   let err = false;
@@ -76,9 +82,8 @@ function goToWriteComment() {
   } else {
     const c = {
       postId: qid.value,
-      id: 454321,
       content: commentContent.value,
-      writer: "닉네임뭐하지",
+      writer: userInfo.value.userName,
     };
 
     savaComment(
@@ -135,6 +140,7 @@ function goToWriteComment() {
           v-for="c in searchComment"
           :key="c.id"
           :comment="c"
+          @reload-comment="showCommentList"
         ></QnACommentListItem>
       </div>
 
@@ -169,7 +175,6 @@ function goToWriteComment() {
     <div class="col-10 mt-4">
       <div class="container d-flex justify-content-end">
         <button class="btn btn-dark mx-1" id="modify-btn" @click="goToModify">수정</button>
-        <button class="btn btn-dark mx-1" id="delete-btn" @click="goToDelete">삭제</button>
         <button class="btn btn-dark mx-1" id="list-btn" @click="goToList">목록</button>
       </div>
     </div>

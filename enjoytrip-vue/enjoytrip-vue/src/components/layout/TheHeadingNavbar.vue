@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
+const { userLogout } = memberStore;
+if (isLogin.value) {
+  console.log(userInfo.value);
+}
+</script>
 
 <template>
   <nav
@@ -45,7 +54,7 @@
                   >검색</router-link
                 >
               </li>
-              <li>
+              <li v-if="isLogin">
                 <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'my-place' }"
                   >My Place</router-link
                 >
@@ -53,7 +62,9 @@
             </ul>
           </li>
         </ul>
+        <!-- 커뮤니티 -->
         <ul
+          v-if="isLogin"
           class="navbar-nav my-2 me-1 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
@@ -81,14 +92,26 @@
             </ul>
           </li>
         </ul>
+        <!-- 로그인 / 로그아웃 -->
         <ul
           class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
-          <li class="nav-item">
+          <li class="nav-item" v-if="!isLogin">
             <router-link class="dropdown-item menu-font-sm" href="#" :to="{ name: 'user' }"
               >로그인</router-link
             >
+          </li>
+          <li class="nav-item" v-if="isLogin && userInfo">
+            <router-link class="medium" style="color: black" href="#" :to="{ name: 'user' }">{{
+              userInfo.userName
+            }}</router-link>
+            <span class="light me-4">님, 환영합니다.</span>
+          </li>
+          <li class="nav-item" v-if="isLogin">
+            <button class="dropdown-item menu-font-sm" @click="userLogout(userInfo.userId)">
+              로그아웃
+            </button>
           </li>
         </ul>
       </div>
@@ -97,7 +120,7 @@
 </template>
 
 <style scoped>
-/* @font-face {
+@font-face {
   font-family: "EASTARJET-Heavy";
   src: url("/fonts/EASTARJET-Heavy.ttf");
 }
@@ -105,7 +128,23 @@
 @font-face {
   font-family: "EASTARJET-Medium";
   src: url("/fonts/EASTARJET-Medium.ttf");
-} */
+}
+
+@font-face {
+  font-family: "EASTARJET-Light";
+  src: url("/fonts/EASTARJET-Light.ttf");
+}
+
+.heavy {
+  font-family: "EASTARJET-Heavy";
+}
+.medium {
+  font-family: "EASTARJET-Medium";
+}
+
+.light {
+  font-family: "EASTARJET-Light";
+}
 
 nav {
   /* display: flex; */

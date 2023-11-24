@@ -49,8 +49,18 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberDto saveMember(MemberDto memberDto) throws Exception {
-		return memberMapper.saveMember(memberDto);
+	public void saveMember(MemberDto memberDto) throws Exception {
+		memberMapper.saveMember(memberDto);
+	}
+
+	@Override
+	public void modifyMember(MemberDto user) throws Exception {
+		memberMapper.modifyMember(user);
+	}
+
+	@Override
+	public void deleteMember(String userId) throws Exception {
+		memberMapper.deleteMember(userId);
 	}
 
 }

@@ -13,7 +13,7 @@ public class QnaCommentResponseDto {
     private String content;                // 내용
     private String writer;                 // 작성자
 //    private Boolean deleteYn;              // 삭제 여부
-    private LocalDateTime createdDate;     // 생성일시
-    private LocalDateTime modifiedDate;    // 최종 수정일시
+    private String createdDate;     // 생성일시
+    private String modifiedDate;    // 최종 수정일시
 
 }

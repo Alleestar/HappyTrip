@@ -53,10 +53,7 @@
                </where>
               ) i join attraction_detail d
         on i.content_id = d.content_id
-        <choose>
-             <when test="rand"> order by RAND()</when>
-             <otherwise>order by i.readcount decs</otherwise>
-        </choose>
+        order by i.readcount desc <if test="rand">, RAND() </if>
         limit #{start}, #{listsize}
     </select>
 

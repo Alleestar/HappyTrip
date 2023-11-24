@@ -20,8 +20,16 @@ async function registerUser(user, success, fail) {
   await local.post(`/user/register`, user).then(success).catch(fail);
 }
 
+async function modifyUser(user, success, fail) {
+  await local.patch(`/user/modify`, user).then(success).catch(fail);
+}
+
+async function deleteUser(userid, success, fail) {
+  await local.delete(`/user/delete/${userid}`).then(success).catch(fail);
+}
+
 async function logout(userid, success, fail) {
   await local.get(`/user/logout/${userid}`).then(success).catch(fail);
 }
 
-export { userConfirm, findById, tokenRegeneration, registerUser, logout };
+export { userConfirm, modifyUser, deleteUser, findById, tokenRegeneration, registerUser, logout };

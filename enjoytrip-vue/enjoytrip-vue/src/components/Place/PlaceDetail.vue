@@ -4,6 +4,11 @@ import { describeAttraction } from "@/api/attraction.js";
 import PlacePlanListItem from "@/components/Place/item/PlacePlanListItem.vue";
 import { listPlanMeta, createPlanMeta } from "@/api/plan.js";
 
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
+
 const attr = ref({});
 const props = defineProps({ attraction: Object, category: String });
 const desc = ref("");
@@ -54,7 +59,7 @@ function planeBtn() {
 
 function makeNewPlanList() {
   const planMeta = {
-    userId: 1,
+    userId: userInfo.value.userId,
   };
   createPlanMeta(
     planMeta,
@@ -69,7 +74,7 @@ function makeNewPlanList() {
 loadPlanList();
 function loadPlanList() {
   const planMeta = {
-    userId: 1,
+    userId: userInfo.value.userId,
     pgno: currentPage.value,
   };
   listPlanMeta(
@@ -110,6 +115,9 @@ function nextPage() {
     loadPlanList();
   }
 }
+
+
+
 </script>
 
 <template>
@@ -139,7 +147,7 @@ function nextPage() {
         </div>
         <!-- Modal footer -->
         <div class="modal-footer" style="display: flex; justify-content: space-between">
-          <div id="list-area">
+          <div id="list-area" v-if="isLogin">
             <div class="dropdown">
               <button
                 class="btn btn-plane dropdown-toggle"

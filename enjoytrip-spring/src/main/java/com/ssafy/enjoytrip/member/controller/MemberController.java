@@ -30,10 +30,11 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> save(@RequestBody MemberDto params) throws Exception {
-		MemberDto user = memberService.saveMember(params);
+		log.info("회원가입 : {}", params);
+		memberService.saveMember(params);
 
-		if (user.getUserId() != null) {
-			return ResponseEntity.ok(user.getUserId());
+		if (params.getUserId() != null) {
+			return ResponseEntity.ok(params.getUserId());
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -140,5 +141,28 @@ public class MemberController {
 			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+
+	@ApiOperation(value = "회원 정보 수정", notes = "회원정보(이름, 이메일) 수정한다.")
+	@PatchMapping("/modify")
+	public ResponseEntity<?> modifyMember(@RequestBody MemberDto memberDto){
+		try{
+			memberService.modifyMember(memberDto);
+			return ResponseEntity.ok("SUCCESS");
+		} catch(Exception e){
+			return ResponseEntity.internalServerError().body("예상치 못한 문제가 발생했습니다.");
+		}
+
+	}
+
+	@ApiOperation(value = "회원 탈퇴", notes = "서비스에서 탈퇴한다.")
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteMember(@PathVariable String id){
+		try{
+			memberService.deleteMember(id);
+			return ResponseEntity.ok("SUCCESS");
+		} catch(Exception e){
+			return ResponseEntity.internalServerError().body("예상치 못한 문제가 발생했습니다.");
+		}
 	}
 }
